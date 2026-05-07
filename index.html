@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>La Mesa CR – Menú Digital</title>
+<meta name="description" content="Menú digital del restaurante La Mesa CR. Ordena desde tu mesa o por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0B07;--bg2:#1A1209;--bg3:#251A0F;
+  --surface:#1F1610;--surface2:#2A1E12;--surface3:#33251A;
+  --gold:#E8A020;--gold-l:#F5BC50;--gold-d:#C07A10;
+  --terra:#C15C3A;--terra-l:#D97250;--terra-d:#943D22;
+  --cream:#FDF6ED;--cream2:#F5E8D0;--cream3:#E8C890;
+  --green:#25D366;--green-d:#1DA851;
+  --text:#FDF6ED;--text-m:rgba(253,246,237,.72);--text-s:rgba(253,246,237,.45);
+  --border:rgba(232,160,32,.15);--border2:rgba(232,160,32,.3);
+  --sh:rgba(0,0,0,.4);--sh2:rgba(0,0,0,.65);
+  --r:14px;--r-sm:8px;--r-lg:22px;
+  --tr:.25s ease;
+  --nav-h:66px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes wa-pulse{0%,100%{box-shadow:0 6px 24px rgba(37,211,102,.45)}50%{box-shadow:0 6px 32px rgba(37,211,102,.75),0 0 0 8px rgba(37,211,102,.12)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes badgePop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:10px}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav-h);padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(15,11,7,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:box-shadow var(--tr)}
+.nav.scrolled{box-shadow:0 4px 28px rgba(0,0,0,.5)}
+.nav-brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.nav-logo-img{height:38px;width:38px;border-radius:10px;object-fit:cover;border:2px solid var(--border2)}
+.nav-logo-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--terra),var(--gold));display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid var(--border2)}
+.nav-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--cream);letter-spacing:.01em}
+.nav-name em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-links{display:none;align-items:center;gap:20px;list-style:none}
+.nav-links a{font-size:.82rem;font-weight:600;color:var(--text-m);transition:color var(--tr);letter-spacing:.03em;text-transform:uppercase}
+.nav-links a:hover{color:var(--gold)}
+.lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.08);border-radius:50px;padding:2px;border:1px solid rgba(255,255,255,.12)}
+.lang-btn{background:none;border:none;cursor:pointer;font-size:.72rem;font-weight:700;color:var(--text-s);padding:4px 9px;border-radius:50px;transition:all .2s;letter-spacing:.05em}
+.lang-btn.active{background:var(--gold);color:#150800;box-shadow:0 2px 8px rgba(232,160,32,.4)}
+.nav-cart-btn{position:relative;width:40px;height:40px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all var(--tr);color:var(--cream)}
+.nav-cart-btn:hover{background:var(--surface3);border-color:var(--border2)}
+.cart-count{position:absolute;top:-5px;right:-5px;background:var(--terra);color:#fff;font-size:.6rem;font-weight:800;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;animation:badgePop .3s ease}
+.cart-count.show{display:flex}
+.hamburger{display:flex;flex-direction:column;gap:4.5px;cursor:pointer;background:none;border:none;padding:6px}
+.hamburger span{width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(15,11,7,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:899;padding:20px;flex-direction:column;gap:6px;animation:fadeIn .2s ease}
+.mobile-menu.open{display:flex}
+.mobile-menu a{display:block;padding:12px 16px;border-radius:var(--r-sm);color:var(--text-m);font-weight:600;font-size:.9rem;transition:all var(--tr)}
+.mobile-menu a:hover{background:var(--surface2);color:var(--gold)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:calc(var(--nav-h) + 20px) 20px 40px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,11,7,.4) 0%,rgba(15,11,7,.5) 40%,rgba(15,11,7,.92) 75%,var(--bg) 100%)}
+.hero-noise{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-size:200px}
+.hero-inner{position:relative;z-index:1;max-width:720px}
+.hero-qr-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(232,160,32,.15);border:1px solid rgba(232,160,32,.4);color:var(--gold);padding:5px 14px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.8rem);line-height:1.1;color:var(--cream);margin-bottom:12px}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:1rem;color:var(--text-m);line-height:1.75;margin-bottom:28px;max-width:480px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.btn-menu{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#0F0B07;padding:13px 26px;border-radius:50px;font-weight:700;font-size:.9rem;border:none;transition:all var(--tr);box-shadow:0 6px 24px rgba(232,160,32,.4)}
+.btn-menu:hover{background:var(--gold-l);transform:translateY(-2px)}
+.btn-wa{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;padding:13px 26px;border-radius:50px;font-weight:700;font-size:.9rem;border:none;transition:all var(--tr);box-shadow:0 6px 24px rgba(37,211,102,.35)}
+.btn-wa:hover{background:var(--green-d);transform:translateY(-2px)}
+.hero-status-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.open-badge{display:flex;align-items:center;gap:7px;font-size:.82rem;font-weight:700}
+.open-dot{width:9px;height:9px;border-radius:50%;background:#4CAF50;box-shadow:0 0 0 3px rgba(76,175,80,.25);flex-shrink:0}
+.open-dot.closed{background:#F44336;box-shadow:0 0 0 3px rgba(244,67,54,.25)}
+.hero-table-pill{display:flex;align-items:center;gap:6px;background:rgba(232,160,32,.12);border:1px solid rgba(232,160,32,.3);border-radius:50px;padding:5px 14px;font-size:.8rem;font-weight:700;color:var(--gold)}
+
+/* ── SPECIAL BANNER ── */
+.special-bar{background:linear-gradient(90deg,var(--terra-d),var(--terra),var(--terra-d));padding:14px 20px;text-align:center;display:none}
+.special-bar.show{display:block}
+.special-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.special-bar span{font-size:.88rem;color:#fff}
+.special-bar strong{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream)}
+.special-bar .s-price{background:rgba(0,0,0,.3);padding:4px 12px;border-radius:50px;font-weight:700;color:var(--gold-l);font-size:.88rem}
+.special-bar .s-orig{text-decoration:line-through;opacity:.65;font-size:.78rem}
+
+/* ── MENU SECTION ── */
+#menu{padding:50px 0 80px;background:var(--bg)}
+.menu-wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.menu-header{text-align:center;margin-bottom:36px;padding:0 10px}
+.sec-lbl{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.sec-h2{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.5rem);color:var(--cream);margin-bottom:10px}
+.sec-sub{font-size:.92rem;color:var(--text-m);line-height:1.7}
+
+/* ── SEARCH BAR ── */
+.menu-search-wrap{margin-bottom:24px;position:relative}
+.menu-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:50px;padding:12px 18px 12px 44px;font-size:.9rem;color:var(--cream);outline:none;transition:border-color var(--tr)}
+.menu-search::placeholder{color:var(--text-s)}
+.menu-search:focus{border-color:var(--border2)}
+.search-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-s);font-size:1rem;pointer-events:none}
+
+/* ── CATEGORY TABS ── */
+.cat-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:30px;scrollbar-width:none;-ms-overflow-style:none}
+.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:50px;background:var(--surface);border:1.5px solid var(--border);color:var(--text-m);font-size:.8rem;font-weight:600;white-space:nowrap;transition:all var(--tr);flex-shrink:0}
+.cat-tab:hover{border-color:var(--border2);color:var(--cream)}
+.cat-tab.active{background:var(--gold);border-color:var(--gold);color:#0F0B07;font-weight:700}
+.cat-tab .tab-ico{font-size:.95rem}
+.cat-tab .tab-count{background:rgba(0,0,0,.15);padding:1px 6px;border-radius:50px;font-size:.68rem}
+
+/* ── CATEGORY HEADERS ── */
+.cat-section{margin-bottom:48px}
+.cat-section:last-child{margin-bottom:0}
+.cat-heading{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.cat-heading-ico{font-size:1.5rem}
+.cat-heading-txt h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);font-weight:500}
+.cat-heading-txt p{font-size:.75rem;color:var(--text-s);margin-top:2px}
+.cat-heading-line{flex:1;height:1px;background:var(--border)}
+
+/* ── PRODUCT GRID ── */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+@media(max-width:640px){.products-grid{grid-template-columns:1fr;gap:14px}}
+
+/* ── PRODUCT CARD ── */
+.p-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);cursor:pointer;position:relative}
+.p-card:hover{transform:translateY(-4px);box-shadow:0 16px 44px var(--sh);border-color:var(--border2)}
+.p-card.featured{border-color:rgba(232,160,32,.4)}
+.p-img-wrap{width:100%;height:170px;overflow:hidden;position:relative;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.p-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.p-card:hover .p-img-wrap img{transform:scale(1.06)}
+.p-emoji-ph{font-size:60px;opacity:.7}
+.p-badge-row{position:absolute;top:10px;left:10px;display:flex;gap:5px;flex-wrap:wrap;z-index:2}
+.pbadge{padding:3px 10px;border-radius:50px;font-size:.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.pb-popular{background:var(--terra);color:#fff}
+.pb-featured{background:var(--gold);color:#0F0B07}
+.pb-limited{background:#FF9800;color:#fff}
+.pb-off{background:rgba(0,0,0,.6);color:#ccc}
+.pb-vegan{background:#4CAF50;color:#fff}
+.pb-new{background:#9C27B0;color:#fff}
+.p-status-banner{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);text-align:center;padding:7px;font-size:.75rem;font-weight:700}
+.p-status-banner.limited{color:#FFC107}
+.p-status-banner.unavailable{color:#F44336}
+.p-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.p-cat-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);margin-bottom:6px}
+.p-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);margin-bottom:7px;font-weight:500;line-height:1.25}
+.p-desc{font-size:.8rem;color:var(--text-m);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
+.p-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.p-price{font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:var(--gold-l)}
+.p-price-usd{font-size:.72rem;color:var(--text-s);margin-top:1px}
+.btn-add{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:50px;border:none;font-weight:700;font-size:.78rem;transition:all var(--tr);white-space:nowrap}
+.btn-add.avail{background:var(--terra);color:#fff}
+.btn-add.avail:hover{background:var(--terra-l)}
+.btn-add.limited{background:rgba(255,152,0,.15);color:#FFC107;border:1.5px solid rgba(255,152,0,.4)}
+.btn-add.limited:hover{background:rgba(255,152,0,.25)}
+.btn-add.off{background:var(--surface2);color:var(--text-s);cursor:not-allowed;opacity:.7}
+.btn-add-in-cart{background:var(--gold)!important;color:#0F0B07!important}
+
+/* ── ALLERGEN TAGS ── */
+.allergen-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.allergen-tag{font-size:.6rem;padding:2px 7px;border-radius:50px;background:rgba(255,255,255,.06);color:var(--text-s);border:1px solid rgba(255,255,255,.1);text-transform:uppercase;letter-spacing:.04em}
+
+/* ── NO RESULTS ── */
+.no-results{text-align:center;padding:60px 20px;color:var(--text-s);animation:fadeUp .3s ease}
+.no-results .nr-ico{font-size:50px;margin-bottom:14px}
+.no-results p{font-size:.92rem}
+
+/* ── SPECIALS SECTION ── */
+#especiales{padding:40px 16px;background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.specials-wrap{max-width:1100px;margin:0 auto}
+.special-card{display:flex;align-items:center;gap:20px;background:linear-gradient(135deg,rgba(193,92,58,.15),rgba(232,160,32,.1));border:1px solid rgba(232,160,32,.3);border-radius:var(--r-lg);padding:24px 28px;flex-wrap:wrap}
+.sc-emoji{font-size:52px;flex-shrink:0;animation:float 3s ease-in-out infinite}
+.sc-info{flex:1;min-width:200px}
+.sc-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-l);margin-bottom:6px}
+.sc-dish{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--cream);margin-bottom:8px}
+.sc-desc{font-size:.85rem;color:var(--text-m);line-height:1.6}
+.sc-prices{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.sc-price{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--gold)}
+.sc-orig{font-size:.85rem;color:var(--text-s);text-decoration:line-through}
+.sc-save{background:var(--terra);color:#fff;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:800;text-align:center}
+
+/* ── ABOUT SECTION ── */
+#nosotros{padding:80px 20px;background:var(--bg2)}
+.about-wrap{max-width:1100px;margin:0 auto}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:36px}}
+.about-img-box{position:relative}
+.about-img{width:100%;aspect-ratio:4/3;border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.about-float-tag{position:absolute;bottom:-16px;right:-10px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:14px 18px;box-shadow:0 10px 32px var(--sh2);display:flex;align-items:center;gap:10px}
+.aft-ico{font-size:26px}
+.aft-txt strong{display:block;font-family:'Playfair Display',serif;font-size:.95rem;color:var(--gold)}
+.aft-txt span{font-size:.74rem;color:var(--text-s)}
+.about-vals{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.val-row{display:flex;gap:12px;align-items:flex-start}
+.val-ico-box{width:42px;height:42px;border-radius:12px;background:rgba(232,160,32,.12);border:1px solid rgba(232,160,32,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.val-tx strong{display:block;color:var(--cream);font-weight:600;margin-bottom:3px;font-size:.92rem}
+.val-tx p{font-size:.82rem;color:var(--text-m);line-height:1.6}
+
+/* ── REVIEWS ── */
+#resenas{padding:70px 20px;background:var(--bg)}
+.reviews-wrap{max-width:1100px;margin:0 auto}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:36px}
+.rev-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 24px;transition:border-color var(--tr)}
+.rev-card:hover{border-color:var(--border2)}
+.rev-stars{color:var(--gold);font-size:1rem;letter-spacing:2px;margin-bottom:10px}
+.rev-text{font-size:.87rem;color:var(--text-m);line-height:1.7;margin-bottom:14px;font-style:italic}
+.rev-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rev-author{font-weight:700;font-size:.85rem;color:var(--cream)}
+.rev-dish{font-size:.72rem;color:var(--gold);background:rgba(232,160,32,.1);padding:2px 8px;border-radius:50px}
+.rev-date{font-size:.72rem;color:var(--text-s)}
+.rev-cta{text-align:center;margin-top:32px}
+
+/* ── CONTACT / HOURS ── */
+#contacto{padding:70px 20px;background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.contact-wrap{max-width:1100px;margin:0 auto}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:36px}}
+.c-info-row{display:flex;align-items:flex-start;gap:13px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;transition:border-color var(--tr)}
+.c-info-row:hover{border-color:var(--border2)}
+.c-info-ico{width:40px;height:40px;border-radius:10px;background:rgba(232,160,32,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.c-info-tx strong{display:block;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-s);margin-bottom:3px}
+.c-info-tx span{font-size:.88rem;color:var(--cream)}
+.c-info-tx a{color:var(--gold);transition:color var(--tr)}
+.c-info-tx a:hover{color:var(--gold-l)}
+.schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.schedule-card-head{background:linear-gradient(90deg,var(--terra-d),var(--terra));padding:16px 20px}
+.schedule-card-head h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);margin-bottom:3px}
+.schedule-card-head p{font-size:.78rem;color:rgba(253,246,237,.7)}
+.schedule-days{padding:14px 0}
+.sch-day{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);transition:background var(--tr)}
+.sch-day:last-child{border-bottom:none}
+.sch-day:hover{background:var(--surface2)}
+.sch-day.today{background:rgba(232,160,32,.07)}
+.sch-day-name{font-size:.83rem;font-weight:600;color:var(--cream)}
+.sch-day-name.today-name{color:var(--gold)}
+.sch-day-time{font-size:.8rem;color:var(--text-m)}
+.sch-day-closed{font-size:.8rem;color:var(--text-s);font-style:italic}
+.btn-map{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1.5px solid var(--border2);color:var(--cream);padding:12px 22px;border-radius:50px;font-weight:600;font-size:.85rem;transition:all var(--tr);margin-top:16px}
+.btn-map:hover{background:var(--surface3);border-color:var(--gold);color:var(--gold)}
+
+/* ── WA FLOATING ── */
+.wa-float{position:fixed;bottom:24px;right:20px;z-index:800;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.wa-float-btn{width:56px;height:56px;border-radius:50%;background:var(--green);border:none;color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);animation:wa-pulse 2.5s ease-in-out infinite;transition:transform var(--tr)}
+.wa-float-btn:hover{transform:scale(1.08)}
+.wa-float-label{background:var(--green);color:#fff;padding:6px 14px;border-radius:50px;font-size:.75rem;font-weight:700;box-shadow:0 4px 16px rgba(37,211,102,.35);display:none}
+.wa-float:hover .wa-float-label{display:block}
+
+/* ── CART SIDEBAR ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:1000;display:none;animation:fadeIn .2s ease}
+.cart-overlay.open{display:block}
+.cart-sidebar{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--surface);border-left:1px solid var(--border);z-index:1001;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.cart-sidebar.open{transform:translateX(0)}
+.cart-head{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cart-head h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream)}
+.cart-head-right{display:flex;align-items:center;gap:10px}
+.cart-items-count{font-size:.78rem;color:var(--text-s)}
+.cart-close-btn{width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--cream);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.cart-close-btn:hover{background:var(--surface3);border-color:var(--border2)}
+.cart-items{flex:1;overflow-y:auto;padding:16px}
+.cart-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text-s);text-align:center;padding:40px 20px}
+.cart-empty-ico{font-size:50px;opacity:.5}
+.cart-empty h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text-m)}
+.cart-empty p{font-size:.83rem;line-height:1.6}
+.cart-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);animation:fadeUp .25s ease}
+.cart-item:last-child{border-bottom:none}
+.ci-img{width:60px;height:60px;border-radius:10px;overflow:hidden;background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px}
+.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:.88rem;font-weight:600;color:var(--cream);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-note{font-size:.73rem;color:var(--text-s);margin-bottom:8px}
+.ci-price{font-family:'Oswald',sans-serif;font-size:1rem;color:var(--gold)}
+.ci-controls{display:flex;align-items:center;gap:6px}
+.qty-btn{width:28px;height:28px;border-radius:50%;background:var(--surface3);border:1px solid var(--border);color:var(--cream);font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.qty-btn:hover{background:var(--gold);border-color:var(--gold);color:#0F0B07}
+.qty-num{min-width:24px;text-align:center;font-weight:700;font-size:.9rem}
+.ci-remove{width:28px;height:28px;border-radius:50%;background:rgba(244,67,54,.1);border:1px solid rgba(244,67,54,.2);color:#F44336;font-size:.75rem;display:flex;align-items:center;justify-content:center;margin-left:6px;transition:all var(--tr)}
+.ci-remove:hover{background:rgba(244,67,54,.2);border-color:#F44336}
+.cart-note-wrap{padding:0 16px 12px}
+.cart-note-lbl{font-size:.75rem;font-weight:600;color:var(--text-s);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.cart-note-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-size:.83rem;color:var(--cream);outline:none;resize:none;min-height:60px;transition:border-color var(--tr)}
+.cart-note-input::placeholder{color:var(--text-s)}
+.cart-note-input:focus{border-color:var(--border2)}
+.cart-footer{padding:16px;border-top:1px solid var(--border);flex-shrink:0}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.cart-subtotal span{font-size:.85rem;color:var(--text-m)}
+.cart-subtotal strong{font-family:'Oswald',sans-serif;font-size:1.1rem;color:var(--cream)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-top:10px;border-top:1px solid var(--border)}
+.cart-total span{font-size:.9rem;font-weight:700;color:var(--cream)}
+.cart-total strong{font-family:'Oswald',sans-serif;font-size:1.35rem;color:var(--gold)}
+.btn-order-now{width:100%;padding:15px;border-radius:50px;background:linear-gradient(90deg,var(--terra),var(--terra-l));border:none;color:#fff;font-weight:800;font-size:.95rem;font-family:'DM Sans',sans-serif;transition:all var(--tr);box-shadow:0 6px 20px rgba(193,92,58,.4);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-order-now:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(193,92,58,.5)}
+.btn-clear-cart{width:100%;padding:10px;border-radius:50px;background:transparent;border:1px solid var(--border);color:var(--text-s);font-size:.8rem;margin-top:8px;transition:all var(--tr)}
+.btn-clear-cart:hover{border-color:rgba(244,67,54,.4);color:#F44336}
+
+/* ── ORDER MODAL ── */
+.order-modal{display:none;position:fixed;inset:0;z-index:1200;align-items:center;justify-content:center;padding:20px}
+.order-modal.open{display:flex;animation:fadeIn .2s ease}
+.order-modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px)}
+.order-modal-box{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px var(--sh2);animation:scaleIn .28s ease}
+.om-head{padding:24px 24px 18px;border-bottom:1px solid var(--border)}
+.om-head h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--cream);margin-bottom:4px}
+.om-head p{font-size:.83rem;color:var(--text-s)}
+.om-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--cream);font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.om-close:hover{background:var(--surface3)}
+.om-body{padding:24px}
+.order-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.order-type-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px;border-radius:var(--r);background:var(--surface2);border:2px solid var(--border);color:var(--text-m);transition:all var(--tr)}
+.order-type-btn:hover,.order-type-btn.selected{background:rgba(232,160,32,.1);border-color:var(--gold);color:var(--cream)}
+.order-type-btn.selected{border-color:var(--gold)}
+.order-type-btn .ot-ico{font-size:28px}
+.order-type-btn .ot-label{font-size:.8rem;font-weight:700;text-align:center}
+.order-type-btn .ot-sub{font-size:.68rem;color:var(--text-s);text-align:center}
+.om-form{display:flex;flex-direction:column;gap:14px}
+.om-field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-s);margin-bottom:6px}
+.om-field input,.om-field textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:11px 14px;font-size:.88rem;color:var(--cream);outline:none;transition:border-color var(--tr)}
+.om-field input::placeholder,.om-field textarea::placeholder{color:var(--text-s)}
+.om-field input:focus,.om-field textarea:focus{border-color:var(--border2)}
+.om-summary{background:var(--surface2);border-radius:var(--r);padding:14px;margin-bottom:4px}
+.om-summary-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-s);margin-bottom:10px}
+.om-summary-item{display:flex;justify-content:space-between;font-size:.83rem;color:var(--text-m);margin-bottom:6px}
+.om-summary-item:last-child{margin-bottom:0;padding-top:8px;border-top:1px solid var(--border);color:var(--cream);font-weight:700}
+.om-summary-item span:last-child{color:var(--gold);font-family:'Oswald',sans-serif;font-size:.95rem}
+.btn-send-wa{width:100%;padding:15px;border-radius:50px;background:var(--green);border:none;color:#fff;font-weight:800;font-size:.95rem;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:9px;transition:all var(--tr);box-shadow:0 6px 22px rgba(37,211,102,.4);margin-top:4px}
+.btn-send-wa:hover{background:var(--green-d);transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,.5)}
+.type-fields{display:none}
+.type-fields.show{display:flex;flex-direction:column;gap:14px}
+
+/* ── PRODUCT MODAL ── */
+.prod-modal{display:none;position:fixed;inset:0;z-index:1100;align-items:center;justify-content:center;padding:16px}
+.prod-modal.open{display:flex;animation:fadeIn .2s ease}
+.prod-modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px)}
+.prod-modal-box{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px var(--sh2);animation:scaleIn .28s ease}
+.pm-img{width:100%;height:280px;object-fit:cover;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.pm-img-ph{width:100%;height:220px;display:flex;align-items:center;justify-content:center;font-size:80px;background:linear-gradient(135deg,var(--surface2),var(--surface3));border-radius:var(--r-lg) var(--r-lg) 0 0}
+.pm-body{padding:24px 26px 28px}
+.pm-cat{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--terra-l);margin-bottom:8px}
+.pm-name{font-family:'Playfair Display',serif;font-size:1.65rem;color:var(--cream);margin-bottom:12px;line-height:1.2}
+.pm-desc{font-size:.9rem;color:var(--text-m);line-height:1.75;margin-bottom:18px}
+.pm-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.pm-tag{padding:4px 10px;border-radius:50px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pm-allergens{margin-bottom:18px}
+.pm-allergens-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-s);margin-bottom:8px}
+.pm-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.pm-price{font-family:'Oswald',sans-serif;font-size:1.5rem;color:var(--gold-l)}
+.pm-qty-controls{display:flex;align-items:center;gap:10px}
+.pm-qty-btn{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);color:var(--cream);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.pm-qty-btn:hover{background:var(--gold);border-color:var(--gold);color:#0F0B07}
+.pm-qty-num{min-width:30px;text-align:center;font-weight:700;font-size:1rem}
+.btn-pm-add{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;background:var(--terra);border:none;color:#fff;font-weight:800;font-size:.9rem;transition:all var(--tr)}
+.btn-pm-add:hover{background:var(--terra-l);transform:translateY(-1px)}
+.btn-pm-add:disabled{background:var(--surface2);color:var(--text-s);cursor:not-allowed;transform:none}
+.pm-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;border:none;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr);z-index:5}
+.pm-close:hover{background:rgba(0,0,0,.8)}
+
+/* ── ADMIN PANEL ── */
+#adminPanel{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);overflow-y:auto}
+.admin-container{max-width:1000px;margin:0 auto;padding:30px 20px 60px}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:14px}
+.admin-header h1{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)}
+.admin-header p{font-size:.82rem;color:var(--text-s);margin-top:4px}
+.btn-close-admin{background:var(--surface2);border:1px solid var(--border);color:var(--cream);padding:10px 20px;border-radius:50px;font-size:.85rem;font-weight:600;transition:all var(--tr)}
+.btn-close-admin:hover{background:var(--surface3)}
+.admin-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:28px;scrollbar-width:none}
+.admin-tabs::-webkit-scrollbar{display:none}
+.admin-tab{padding:10px 18px;border-radius:50px;background:var(--surface);border:1px solid var(--border);color:var(--text-m);font-size:.8rem;font-weight:600;white-space:nowrap;transition:all var(--tr)}
+.admin-tab.active{background:var(--gold);border-color:var(--gold);color:#0F0B07}
+.admin-pane{display:none}
+.admin-pane.active{display:block}
+/* GitHub Config */
+.gh-config{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:24px}
+.gh-config h3{font-size:1rem;font-weight:700;color:var(--cream);margin-bottom:16px}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-s);margin-bottom:6px}
+.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:10px 13px;font-size:.87rem;color:var(--cream);outline:none;transition:border-color var(--tr)}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--border2)}
+.form-row input::placeholder,.form-row textarea::placeholder{color:var(--text-s)}
+.form-row select option{background:#1A1209;color:var(--cream)}
+.admin-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.admin-grid-2{grid-template-columns:1fr}}
+.btn-save{background:var(--gold);border:none;color:#0F0B07;padding:11px 26px;border-radius:50px;font-weight:800;font-size:.85rem;transition:all var(--tr)}
+.btn-save:hover{background:var(--gold-l)}
+.btn-save:disabled{opacity:.6;cursor:not-allowed}
+.btn-gh-push{background:linear-gradient(90deg,var(--terra),var(--terra-l));border:none;color:#fff;padding:12px 28px;border-radius:50px;font-weight:800;font-size:.88rem;display:flex;align-items:center;gap:8px;transition:all var(--tr)}
+.btn-gh-push:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(193,92,58,.4)}
+.btn-gh-push:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-danger{background:rgba(244,67,54,.12);border:1px solid rgba(244,67,54,.3);color:#F44336;padding:8px 16px;border-radius:50px;font-size:.8rem;font-weight:600;transition:all var(--tr)}
+.btn-danger:hover{background:rgba(244,67,54,.22);border-color:#F44336}
+.push-status{padding:10px 16px;border-radius:var(--r-sm);font-size:.83rem;margin-top:12px;display:none}
+.push-status.ok{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3);color:#81C784}
+.push-status.err{background:rgba(244,67,54,.12);border:1px solid rgba(244,67,54,.3);color:#F44336}
+.push-status.loading{background:rgba(232,160,32,.1);border:1px solid rgba(232,160,32,.2);color:var(--gold)}
+/* Admin items list */
+.admin-items-list{display:flex;flex-direction:column;gap:10px}
+.admin-item-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color var(--tr)}
+.admin-item-row:hover{border-color:var(--border2)}
+.ai-emoji{font-size:26px;flex-shrink:0}
+.ai-img{width:44px;height:44px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center}
+.ai-img img{width:100%;height:100%;object-fit:cover}
+.ai-info{flex:1;min-width:0}
+.ai-name{font-size:.9rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai-meta{font-size:.74rem;color:var(--text-s);margin-top:2px}
+.ai-price{font-family:'Oswald',sans-serif;font-size:.95rem;color:var(--gold);flex-shrink:0}
+.ai-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sd-available{background:#4CAF50}
+.sd-limited{background:#FFC107}
+.sd-unavailable{background:#F44336}
+.ai-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-edit-sm,.btn-del-sm{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all var(--tr)}
+.btn-edit-sm{background:rgba(232,160,32,.12);border:1px solid rgba(232,160,32,.2);color:var(--gold)}
+.btn-edit-sm:hover{background:rgba(232,160,32,.25)}
+.btn-del-sm{background:rgba(244,67,54,.08);border:1px solid rgba(244,67,54,.18);color:#F44336}
+.btn-del-sm:hover{background:rgba(244,67,54,.18)}
+/* Item edit form */
+.item-edit-form{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);padding:24px;margin-bottom:20px;display:none;animation:fadeUp .25s ease}
+.item-edit-form.show{display:block}
+.item-edit-form h3{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:18px}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap}
+.badge-toggle{padding:5px 12px;border-radius:50px;font-size:.72rem;font-weight:700;background:var(--surface2);border:1.5px solid var(--border);color:var(--text-m);cursor:pointer;transition:all var(--tr)}
+.badge-toggle.active{background:var(--terra);border-color:var(--terra);color:#fff}
+/* Toast */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border2);border-radius:50px;padding:12px 22px;font-size:.85rem;color:var(--cream);box-shadow:0 12px 36px var(--sh2);z-index:3000;display:flex;align-items:center;gap:8px;white-space:nowrap;opacity:0;transition:all .3s ease;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:rgba(76,175,80,.4)}
+.toast.err{border-color:rgba(244,67,54,.4)}
+
+/* ── FOOTER ── */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 20px;text-align:center}
+footer p{font-size:.78rem;color:var(--text-s);line-height:1.7}
+footer strong{color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(min-width:768px){
+  .nav-links{display:flex}
+  .hamburger,.mobile-menu{display:none!important}
+}
+@media(max-width:767px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
+@media(max-width:480px){
+  .hero-h1{font-size:1.8rem}
+  .hero-ctas{gap:8px}
+  .btn-menu,.btn-wa{padding:11px 20px;font-size:.83rem}
+  .order-type-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-brand" id="navBrand">
+    <div class="nav-logo-ico" id="navLogoIco">🍽️</div>
+    <span class="nav-name" id="navBrandName">La Mesa CR</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#menu" data-i18n="nav_menu">Menú</a></li>
+    <li><a href="#nosotros" data-i18n="nav_about">Nosotros</a></li>
+    <li><a href="#resenas" data-i18n="nav_reviews">Reseñas</a></li>
+    <li><a href="#contacto" data-i18n="nav_contact">Contacto</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnEs">ES</button>
+      <button class="lang-btn" id="btnEn">EN</button>
+    </div>
+    <button class="nav-cart-btn" id="cartOpenBtn" title="Ver carrito">
+      🛒
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#menu" data-i18n="nav_menu">Menú</a>
+  <a href="#nosotros" data-i18n="nav_about">Nosotros</a>
+  <a href="#resenas" data-i18n="nav_reviews">Reseñas</a>
+  <a href="#contacto" data-i18n="nav_contact">Contacto</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="heroSection">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-inner">
+    <div class="hero-qr-badge">📱 <span data-i18n="qr_badge">Menú digital · Escanea y ordena</span></div>
+    <h1 class="hero-h1" id="heroTitle">Bienvenido a <em>La Mesa CR</em></h1>
+    <p class="hero-sub" id="heroSub">Sabores que enamoran, momentos que perduran.</p>
+    <div class="hero-ctas">
+      <a href="#menu" class="btn-menu">🍽️ <span data-i18n="ver_menu">Ver Menú</span></a>
+      <button class="btn-wa" id="heroWaBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="pedir_wa">Pedir por WhatsApp</span>
+      </button>
+    </div>
+    <div class="hero-status-row">
+      <div class="open-badge"><div class="open-dot" id="openDot"></div><span id="openText" data-i18n="abierto">Abierto ahora</span></div>
+      <div class="hero-table-pill" id="tablePill" style="display:none">🪑 <span data-i18n="mesa">Mesa</span> <strong id="tablePillNum">#1</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SPECIAL BANNER ── -->
+<div class="special-bar" id="specialBar">
+  <div class="special-bar-inner">
+    <span>⭐</span>
+    <strong id="specialDish">Especial del día</strong>
+    <span id="specialDesc"></span>
+    <div class="s-price" id="specialPrice"></div>
+    <div class="s-orig" id="specialOrig"></div>
+  </div>
+</div>
+
+<!-- ── MENU SECTION ── -->
+<section id="menu">
+  <div class="menu-wrap">
+    <div class="menu-header">
+      <div class="sec-lbl" data-i18n="nuestro_menu_lbl">Nuestra Propuesta</div>
+      <h2 class="sec-h2" data-i18n="nuestro_menu_h2">Nuestro Menú</h2>
+      <p class="sec-sub" data-i18n="nuestro_menu_sub">Todo preparado al momento con ingredientes frescos. Haz clic en cualquier plato para ver detalles y agregar a tu orden.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="menu-search-wrap">
+      <span class="search-ico">🔍</span>
+      <input type="text" class="menu-search" id="menuSearch" placeholder="Buscar platillo..." data-i18n-ph="buscar_ph">
+    </div>
+
+    <!-- Category tabs -->
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" data-cat="all">
+        <span class="tab-ico">🍽️</span>
+        <span data-i18n="todos">Todos</span>
+      </button>
+    </div>
+
+    <!-- Products by category -->
+    <div id="productsContainer"></div>
+
+    <!-- No results -->
+    <div class="no-results" id="noResults" style="display:none">
+      <div class="nr-ico">🔍</div>
+      <p data-i18n="no_results">No encontramos platillos con ese nombre.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SPECIALS SECTION ── -->
+<section id="especiales" style="display:none">
+  <div class="specials-wrap">
+    <div class="sec-lbl" data-i18n="especiales_lbl">Solo Hoy</div>
+    <h2 class="sec-h2" style="margin-bottom:22px" data-i18n="especiales_h2">Especial del Día</h2>
+    <div id="specialsContainer"></div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="nosotros">
+  <div class="about-wrap">
+    <div class="about-grid">
+      <div class="about-img-box">
+        <div class="about-img" id="aboutImgBox"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:80px">🍽️</div></div>
+        <div class="about-float-tag">
+          <div class="aft-ico">🏆</div>
+          <div class="aft-txt"><strong id="aboutStat">12+ años</strong><span data-i18n="deleitando">Deleitando paladares</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-lbl" data-i18n="nuestra_historia_lbl">Nuestra Historia</div>
+        <h2 class="sec-h2" id="aboutTitle">Pasión por la Cocina Tica</h2>
+        <p style="font-size:.93rem;color:var(--text-m);line-height:1.8;margin:14px 0 24px" id="aboutText">Texto del restaurante.</p>
+        <div class="about-vals" id="aboutVals"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REVIEWS ── -->
+<section id="resenas">
+  <div class="reviews-wrap">
+    <div style="text-align:center;margin-bottom:10px">
+      <div class="sec-lbl" data-i18n="resenas_lbl">Lo Que Dicen</div>
+      <h2 class="sec-h2" data-i18n="resenas_h2">Reseñas de Clientes</h2>
+    </div>
+    <div class="reviews-grid" id="reviewsGrid"></div>
+    <div class="rev-cta">
+      <a id="dejarResenaBtn" style="display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border2);color:var(--cream);padding:12px 24px;border-radius:50px;font-weight:600;font-size:.85rem;transition:all var(--tr)" href="resenas.html">
+        ✍️ <span data-i18n="dejar_resena">Dejar una reseña</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contacto">
+  <div class="contact-wrap">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-lbl" data-i18n="encontranos_lbl">Encuéntranos</div>
+      <h2 class="sec-h2" data-i18n="contacto_h2">Horarios & Contacto</h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="c-info-row"><div class="c-info-ico">📍</div><div class="c-info-tx"><strong data-i18n="ubicacion">Ubicación</strong><span id="contactLocation">—</span></div></div>
+        <div class="c-info-row"><div class="c-info-ico">📱</div><div class="c-info-tx"><strong>WhatsApp</strong><a id="contactWa" href="#">—</a></div></div>
+        <div class="c-info-row"><div class="c-info-ico">✉️</div><div class="c-info-tx"><strong>Email</strong><a id="contactEmail" href="#">—</a></div></div>
+        <a id="btnMap" class="btn-map" href="#" target="_blank">🗺️ <span data-i18n="ver_mapa">Ver en Google Maps</span></a>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-card-head">
+          <h3 data-i18n="horario">Horario de Atención</h3>
+          <p data-i18n="horario_sub">Los horarios pueden variar en días festivos</p>
+        </div>
+        <div class="schedule-days" id="scheduleDays"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© <span id="footerYear">2025</span> <strong id="footerName">La Mesa CR</strong> · Todos los derechos reservados</p>
+  <p style="margin-top:6px;font-size:.72rem">Hecho con ❤️ en Costa Rica 🇨🇷</p>
+</footer>
+
+<!-- ── WA FLOAT ── -->
+<div class="wa-float" id="waFloat">
+  <div class="wa-float-label" data-i18n="escribenos">¡Escríbenos!</div>
+  <button class="wa-float-btn" id="waFloatBtn">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </button>
+</div>
+
+<!-- ── CART SIDEBAR ── -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <div>
+      <h2 data-i18n="tu_orden">Tu Orden</h2>
+      <span class="cart-items-count" id="cartItemsCount">0 items</span>
+    </div>
+    <div class="cart-head-right">
+      <button class="cart-close-btn" id="cartCloseBtn">✕</button>
+    </div>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-ico">🛒</div>
+      <h3 data-i18n="carrito_vacio">Tu carrito está vacío</h3>
+      <p data-i18n="agrega_items">Agrega platillos del menú para empezar tu orden.</p>
+    </div>
+  </div>
+  <div id="cartFooterSection" style="display:none">
+    <div class="cart-note-wrap">
+      <div class="cart-note-lbl" data-i18n="nota_especial">Nota especial</div>
+      <textarea class="cart-note-input" id="cartNote" placeholder="Alergias, preferencias, etc." rows="2" data-i18n-ph="nota_ph"></textarea>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-subtotal">
+        <span data-i18n="subtotal">Subtotal</span>
+        <strong id="cartSubtotal">₡0</strong>
+      </div>
+      <div class="cart-total">
+        <span data-i18n="total">Total</span>
+        <strong id="cartTotal">₡0</strong>
+      </div>
+      <button class="btn-order-now" id="btnOrderNow">
+        🛵 <span data-i18n="hacer_pedido">Hacer Pedido</span>
+      </button>
+      <button class="btn-clear-cart" id="btnClearCart" data-i18n="vaciar_carrito">Vaciar carrito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ORDER MODAL ── -->
+<div class="order-modal" id="orderModal">
+  <div class="order-modal-bg" id="orderModalBg"></div>
+  <div class="order-modal-box">
+    <button class="om-close" id="orderModalClose">✕</button>
+    <div class="om-head">
+      <h2 data-i18n="como_quieres_pedir">¿Cómo quieres pedir?</h2>
+      <p data-i18n="elige_tipo">Elige el tipo de pedido</p>
+    </div>
+    <div class="om-body">
+      <div class="order-type-grid">
+        <button class="order-type-btn" data-type="mesa" id="typeMesa">
+          <span class="ot-ico">🪑</span>
+          <span class="ot-label" data-i18n="en_mesa">En Mesa</span>
+          <span class="ot-sub" data-i18n="en_mesa_sub">Ordeno desde mi mesa</span>
+        </button>
+        <button class="order-type-btn" data-type="takeout" id="typeTakeout">
+          <span class="ot-ico">🥡</span>
+          <span class="ot-label" data-i18n="para_llevar">Para Llevar</span>
+          <span class="ot-sub" data-i18n="para_llevar_sub">Paso a recogerlo</span>
+        </button>
+        <button class="order-type-btn" data-type="delivery" id="typeDelivery">
+          <span class="ot-ico">🛵</span>
+          <span class="ot-label" data-i18n="delivery">Delivery</span>
+          <span class="ot-sub" data-i18n="delivery_sub">Lo envían a mi casa</span>
+        </button>
+        <button class="order-type-btn" data-type="wa_simple" id="typeWaSimple">
+          <span class="ot-ico">💬</span>
+          <span class="ot-label" data-i18n="solo_wa">Solo WhatsApp</span>
+          <span class="ot-sub" data-i18n="solo_wa_sub">Confirmar con el local</span>
+        </button>
+      </div>
+
+      <!-- Mesa fields -->
+      <div class="type-fields" id="fieldsMesa">
+        <div class="om-field">
+          <label data-i18n="numero_mesa">Número de Mesa</label>
+          <input type="number" id="mesaNum" placeholder="Ej: 5" min="1" max="99">
+        </div>
+        <div class="om-field">
+          <label data-i18n="tu_nombre">Tu nombre (opcional)</label>
+          <input type="text" id="mesaNombre" placeholder="Ej: Carlos" data-i18n-ph="nombre_ph">
+        </div>
+      </div>
+
+      <!-- Takeout fields -->
+      <div class="type-fields" id="fieldsTakeout">
+        <div class="om-field">
+          <label data-i18n="tu_nombre">Tu nombre</label>
+          <input type="text" id="takeoutNombre" placeholder="Ej: María" data-i18n-ph="nombre_ph">
+        </div>
+        <div class="om-field">
+          <label data-i18n="hora_recogida">¿A qué hora pasas?</label>
+          <input type="time" id="takeoutHora">
+        </div>
+      </div>
+
+      <!-- Delivery fields -->
+      <div class="type-fields" id="fieldsDelivery">
+        <div class="om-field">
+          <label data-i18n="tu_nombre">Tu nombre</label>
+          <input type="text" id="delivNombre" placeholder="Ej: Luis">
+        </div>
+        <div class="om-field">
+          <label data-i18n="direccion">Dirección de entrega</label>
+          <textarea id="delivDir" rows="2" placeholder="Calle, barrio, referencias..." data-i18n-ph="dir_ph"></textarea>
+        </div>
+        <div class="om-field">
+          <label data-i18n="telefono">Teléfono de contacto</label>
+          <input type="tel" id="delivTel" placeholder="Ej: 8888-8888">
+        </div>
+        <div style="background:rgba(232,160,32,.08);border:1px solid rgba(232,160,32,.2);border-radius:var(--r-sm);padding:10px 13px;font-size:.82rem;color:var(--gold)">
+          🛵 <strong data-i18n="costo_delivery">Costo de delivery:</strong> <span id="deliveryFeeDisplay">₡2,000</span>
+        </div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="om-summary" id="omSummary">
+        <div class="om-summary-title" data-i18n="resumen_pedido">Resumen del Pedido</div>
+        <div id="omSummaryItems"></div>
+      </div>
+
+      <button class="btn-send-wa" id="btnSendWa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="enviar_pedido_wa">Enviar Pedido por WhatsApp</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRODUCT MODAL ── -->
+<div class="prod-modal" id="prodModal">
+  <div class="prod-modal-bg" id="prodModalBg"></div>
+  <div class="prod-modal-box">
+    <button class="pm-close" id="pmClose">✕</button>
+    <div id="pmImgArea"></div>
+    <div class="pm-body">
+      <div class="pm-cat" id="pmCat"></div>
+      <h2 class="pm-name" id="pmName"></h2>
+      <p class="pm-desc" id="pmDesc"></p>
+      <div class="pm-tags" id="pmTags"></div>
+      <div class="pm-allergens" id="pmAllergens" style="display:none">
+        <div class="pm-allergens-title" data-i18n="alergenos">Alérgenos</div>
+        <div class="allergen-row" id="pmAllergenList"></div>
+      </div>
+      <div class="pm-foot">
+        <div><div class="pm-price" id="pmPrice"></div></div>
+        <div class="pm-qty-controls">
+          <button class="pm-qty-btn" id="pmQtyMinus">−</button>
+          <span class="pm-qty-num" id="pmQtyNum">1</span>
+          <button class="pm-qty-btn" id="pmQtyPlus">+</button>
+          <button class="btn-pm-add" id="pmAddBtn">🛒 <span data-i18n="agregar">Agregar</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="adminPanel">
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <h1>⚙️ Panel Administrativo</h1>
+        <p>Gestiona el menú, info del negocio y publica cambios en GitHub.</p>
+      </div>
+      <button class="btn-close-admin" id="closeAdminBtn">✕ Cerrar</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-pane="paneConfig">🔧 Configuración</button>
+      <button class="admin-tab" data-pane="paneNegocio">🏠 Negocio</button>
+      <button class="admin-tab" data-pane="paneMenu">🍽️ Menú</button>
+      <button class="admin-tab" data-pane="paneCats">📁 Categorías</button>
+      <button class="admin-tab" data-pane="paneEspeciales">⭐ Especiales</button>
+      <button class="admin-tab" data-pane="paneContacto">📞 Contacto</button>
+      <button class="admin-tab" data-pane="panePublicar">🚀 Publicar</button>
+    </div>
+
+    <!-- ── PANE: CONFIG ── -->
+    <div class="admin-pane active" id="paneConfig">
+      <div class="gh-config">
+        <h3>🔑 Conexión con GitHub</h3>
+        <div class="admin-grid-2">
+          <div class="form-row">
+            <label>GitHub Token (Personal Access Token)</label>
+            <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
+          </div>
+          <div class="form-row">
+            <label>Usuario de GitHub</label>
+            <input type="text" id="cfgUser" placeholder="tu-usuario">
+          </div>
+          <div class="form-row">
+            <label>Nombre del Repositorio</label>
+            <input type="text" id="cfgRepo" placeholder="tu-repo.github.io">
+          </div>
+          <div class="form-row">
+            <label>Rama (branch)</label>
+            <input type="text" id="cfgBranch" value="main" placeholder="main">
+          </div>
+        </div>
+        <button class="btn-save" id="btnSaveConfig">Guardar Configuración</button>
+      </div>
+      <div class="gh-config">
+        <h3>🔐 Cambiar Contraseña del Panel</h3>
+        <div class="admin-grid-2">
+          <div class="form-row">
+            <label>Nueva contraseña</label>
+            <input type="password" id="newPwd" placeholder="Nueva contraseña">
+          </div>
+          <div class="form-row">
+            <label>Confirmar contraseña</label>
+            <input type="password" id="newPwd2" placeholder="Repetir contraseña">
+          </div>
+        </div>
+        <button class="btn-save" id="btnChangePwd">Cambiar Contraseña</button>
+      </div>
+    </div>
+
+    <!-- ── PANE: NEGOCIO ── -->
+    <div class="admin-pane" id="paneNegocio">
+      <div class="gh-config">
+        <h3>🏠 Información del Restaurante</h3>
+        <div class="form-row"><label>Nombre del Restaurante</label><input type="text" id="bName" placeholder="La Mesa CR"></div>
+        <div class="form-row"><label>Tagline</label><input type="text" id="bTagline" placeholder="Sabores que enamoran..."></div>
+        <div class="form-row"><label>Título del Hero</label><input type="text" id="bHeroTitle" placeholder="Bienvenido a..."></div>
+        <div class="form-row"><label>Subtítulo del Hero</label><textarea id="bHeroSub" rows="2"></textarea></div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Imagen Hero (URL)</label><input type="text" id="bHeroImg" placeholder="https://..."></div>
+          <div class="form-row"><label>Logo URL</label><input type="text" id="bLogoImg" placeholder="https://..."></div>
+        </div>
+        <div class="form-row"><label>Descripción / Sobre nosotros</label><textarea id="bAboutText" rows="4"></textarea></div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Imagen "Sobre Nosotros" (URL)</label><input type="text" id="bAboutImg" placeholder="https://..."></div>
+          <div class="form-row"><label>Moneda (símbolo)</label><input type="text" id="bCurrency" placeholder="₡"></div>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:.87rem;cursor:pointer"><input type="checkbox" id="bShowTable"> Mostrar opción "En Mesa"</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:.87rem;cursor:pointer"><input type="checkbox" id="bShowTakeout"> Mostrar "Para Llevar"</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:.87rem;cursor:pointer"><input type="checkbox" id="bShowDelivery"> Mostrar "Delivery"</label>
+        </div>
+        <button class="btn-save" id="btnSaveNegocio">Guardar Negocio</button>
+      </div>
+
+      <div class="gh-config">
+        <h3>📊 Estadísticas del Hero</h3>
+        <div id="statsEditor"></div>
+        <button class="btn-save" id="btnSaveStats" style="margin-top:10px">Guardar Stats</button>
+      </div>
+    </div>
+
+    <!-- ── PANE: MENU ── -->
+    <div class="admin-pane" id="paneMenu">
+      <!-- New/Edit Form -->
+      <div class="item-edit-form" id="itemEditForm">
+        <h3 id="itemFormTitle">➕ Nuevo Platillo</h3>
+        <input type="hidden" id="editItemId">
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Nombre (ES)</label><input type="text" id="eiName" placeholder="Ceviche de Mariscos"></div>
+          <div class="form-row"><label>Nombre (EN)</label><input type="text" id="eiNameEn" placeholder="Seafood Ceviche"></div>
+        </div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Categoría</label><select id="eiCat"></select></div>
+          <div class="form-row"><label>Emoji</label><input type="text" id="eiEmoji" placeholder="🦐" maxlength="4"></div>
+        </div>
+        <div class="form-row"><label>Descripción (ES)</label><textarea id="eiDesc" rows="3"></textarea></div>
+        <div class="form-row"><label>Descripción (EN)</label><textarea id="eiDescEn" rows="3"></textarea></div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Precio (en la moneda configurada)</label><input type="number" id="eiPrice" placeholder="6500" min="0" step="50"></div>
+          <div class="form-row"><label>Estado</label>
+            <select id="eiStatus">
+              <option value="available">✅ Disponible</option>
+              <option value="limited">⚠️ Stock Limitado</option>
+              <option value="unavailable">❌ No Disponible</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row"><label>URL de Imagen</label><input type="text" id="eiImg" placeholder="https://..."></div>
+        <div class="form-row">
+          <label>Etiquetas (tags)</label>
+          <div class="badge-row" id="tagsEditor">
+            <button class="badge-toggle" data-tag="popular">⭐ Popular</button>
+            <button class="badge-toggle" data-tag="featured">🔥 Destacado</button>
+            <button class="badge-toggle" data-tag="new">🆕 Nuevo</button>
+            <button class="badge-toggle" data-tag="vegan">🌱 Vegano</button>
+            <button class="badge-toggle" data-tag="spicy">🌶️ Picante</button>
+            <button class="badge-toggle" data-tag="light">🥗 Ligero</button>
+            <button class="badge-toggle" data-tag="premium">💎 Premium</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Alérgenos</label>
+          <div class="badge-row" id="allergensEditor">
+            <button class="badge-toggle" data-allg="gluten">Gluten</button>
+            <button class="badge-toggle" data-allg="lacteos">Lácteos</button>
+            <button class="badge-toggle" data-allg="huevo">Huevo</button>
+            <button class="badge-toggle" data-allg="mariscos">Mariscos</button>
+            <button class="badge-toggle" data-allg="pescado">Pescado</button>
+            <button class="badge-toggle" data-allg="nueces">Nueces</button>
+            <button class="badge-toggle" data-allg="soya">Soya</button>
+          </div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.87rem;cursor:pointer;margin-bottom:16px">
+          <input type="checkbox" id="eiFeatured"> Marcar como platillo destacado (aparece en hero)
+        </label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-save" id="btnSaveItem">Guardar Platillo</button>
+          <button class="btn-danger" id="btnCancelItem">Cancelar</button>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <h3 style="font-size:1rem;font-weight:700;color:var(--cream)">Platillos del Menú</h3>
+        <button class="btn-save" id="btnNewItem">➕ Nuevo Platillo</button>
+      </div>
+      <div class="admin-items-list" id="adminItemsList"></div>
+    </div>
+
+    <!-- ── PANE: CATEGORÍAS ── -->
+    <div class="admin-pane" id="paneCats">
+      <div class="item-edit-form show" id="catEditForm">
+        <h3 id="catFormTitle">➕ Nueva Categoría</h3>
+        <input type="hidden" id="editCatId">
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Nombre (ES)</label><input type="text" id="catName" placeholder="Entradas"></div>
+          <div class="form-row"><label>Nombre (EN)</label><input type="text" id="catNameEn" placeholder="Starters"></div>
+          <div class="form-row"><label>Emoji</label><input type="text" id="catEmoji" placeholder="🥗" maxlength="4"></div>
+          <div class="form-row"><label>Orden (número)</label><input type="number" id="catOrder" placeholder="1" min="1"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-save" id="btnSaveCat">Guardar Categoría</button>
+          <button class="btn-danger" id="btnCancelCat">Limpiar</button>
+        </div>
+      </div>
+      <div class="admin-items-list" id="adminCatsList"></div>
+    </div>
+
+    <!-- ── PANE: ESPECIALES ── -->
+    <div class="admin-pane" id="paneEspeciales">
+      <div class="gh-config">
+        <h3>⭐ Especial del Día</h3>
+        <input type="hidden" id="specId">
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Título (ES)</label><input type="text" id="specTitle" placeholder="Especial del Día"></div>
+          <div class="form-row"><label>Título (EN)</label><input type="text" id="specTitleEn" placeholder="Daily Special"></div>
+          <div class="form-row"><label>Nombre del Plato (ES)</label><input type="text" id="specDish"></div>
+          <div class="form-row"><label>Nombre del Plato (EN)</label><input type="text" id="specDishEn"></div>
+        </div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Descripción (ES)</label><textarea id="specDesc" rows="2"></textarea></div>
+          <div class="form-row"><label>Descripción (EN)</label><textarea id="specDescEn" rows="2"></textarea></div>
+        </div>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>Precio Especial</label><input type="number" id="specPrice" min="0" step="50"></div>
+          <div class="form-row"><label>Precio Original (para tachar)</label><input type="number" id="specOrigPrice" min="0" step="50"></div>
+          <div class="form-row"><label>Emoji</label><input type="text" id="specEmoji" placeholder="⭐" maxlength="4"></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.87rem;cursor:pointer;margin-bottom:16px">
+          <input type="checkbox" id="specActive"> Activar especial (visible en la página)
+        </label>
+        <button class="btn-save" id="btnSaveSpec">Guardar Especial</button>
+      </div>
+    </div>
+
+    <!-- ── PANE: CONTACTO ── -->
+    <div class="admin-pane" id="paneContacto">
+      <div class="gh-config">
+        <h3>📞 Datos de Contacto</h3>
+        <div class="admin-grid-2">
+          <div class="form-row"><label>WhatsApp (código país + número)</label><input type="text" id="cWa" placeholder="50612345678"></div>
+          <div class="form-row"><label>WhatsApp (formato visual)</label><input type="text" id="cWaDisplay" placeholder="6234-5678"></div>
+          <div class="form-row"><label>Email</label><input type="email" id="cEmail" placeholder="info@..."></div>
+          <div class="form-row"><label>Ubicación (texto)</label><input type="text" id="cLocation" placeholder="San José, Costa Rica"></div>
+          <div class="form-row"><label>URL Google Maps</label><input type="text" id="cMapUrl" placeholder="https://maps.google.com/..."></div>
+        </div>
+        <button class="btn-save" id="btnSaveContact">Guardar Contacto</button>
+      </div>
+      <div class="gh-config">
+        <h3>🕐 Horario de Atención</h3>
+        <div id="scheduleEditor"></div>
+        <button class="btn-save" id="btnSaveSchedule" style="margin-top:12px">Guardar Horario</button>
+      </div>
+    </div>
+
+    <!-- ── PANE: PUBLICAR ── -->
+    <div class="admin-pane" id="panePublicar">
+      <div class="gh-config">
+        <h3>🚀 Publicar Cambios en GitHub</h3>
+        <p style="font-size:.85rem;color:var(--text-m);line-height:1.6;margin-bottom:16px">Al publicar, se guardará el archivo <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--gold)">data.json</code> en tu repositorio de GitHub Pages. Los cambios se verán en vivo en segundos.</p>
+        <div id="previewJson" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;font-size:.72rem;color:var(--text-m);max-height:240px;overflow-y:auto;font-family:monospace;margin-bottom:16px;white-space:pre-wrap;word-break:break-all"></div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <button class="btn-gh-push" id="btnGhPush">🚀 Publicar en GitHub</button>
+          <button class="btn-save" onclick="document.getElementById('previewJson').textContent=JSON.stringify(appData,null,2)">👁️ Ver Preview JSON</button>
+        </div>
+        <div class="push-status" id="pushStatus"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DATA & STATE
+// ═══════════════════════════════════════════════════════════════
+let appData = {};
+let lang = 'es';
+let cart = [];
+let selectedOrderType = null;
+let currentProduct = null;
+let pmQty = 1;
+let adminLogoClicks = 0;
+let adminUnlocked = false;
+const ADMIN_HASH_KEY = 'rm_admin_hash';
+const GH_CONFIG_KEY = 'rm_gh_config';
+
+// QR table param
+const urlParams = new URLSearchParams(window.location.search);
+const tableFromUrl = urlParams.get('mesa') || urlParams.get('table');
+
+// i18n strings
+const i18n = {
+  es:{
+    nav_menu:'Menú',nav_about:'Nosotros',nav_reviews:'Reseñas',nav_contact:'Contacto',
+    qr_badge:'Menú digital · Escanea y ordena',ver_menu:'Ver Menú',pedir_wa:'Pedir por WhatsApp',
+    abierto:'Abierto ahora',cerrado:'Cerrado ahora',mesa:'Mesa',
+    nuestro_menu_lbl:'Nuestra Propuesta',nuestro_menu_h2:'Nuestro Menú',
+    nuestro_menu_sub:'Todo preparado al momento con ingredientes frescos. Haz clic en cualquier plato para ver detalles.',
+    todos:'Todos',buscar_ph:'Buscar platillo...',no_results:'No encontramos platillos con ese nombre.',
+    especiales_lbl:'Solo Hoy',especiales_h2:'Especial del Día',
+    nuestra_historia_lbl:'Nuestra Historia',deleitando:'Deleitando paladares',
+    resenas_lbl:'Lo Que Dicen',resenas_h2:'Reseñas de Clientes',dejar_resena:'Dejar una reseña',
+    encontranos_lbl:'Encuéntranos',contacto_h2:'Horarios & Contacto',
+    ubicacion:'Ubicación',horario:'Horario de Atención',horario_sub:'Los horarios pueden variar en días festivos',
+    ver_mapa:'Ver en Google Maps',escribenos:'¡Escríbenos!',
+    tu_orden:'Tu Orden',carrito_vacio:'Tu carrito está vacío',agrega_items:'Agrega platillos del menú para empezar.',
+    nota_especial:'Nota especial',nota_ph:'Alergias, preferencias, sin...',
+    subtotal:'Subtotal',total:'Total',hacer_pedido:'Hacer Pedido',vaciar_carrito:'Vaciar carrito',
+    como_quieres_pedir:'¿Cómo quieres pedir?',elige_tipo:'Elige el tipo de pedido',
+    en_mesa:'En Mesa',en_mesa_sub:'Ordeno desde mi mesa',
+    para_llevar:'Para Llevar',para_llevar_sub:'Paso a recogerlo',
+    delivery:'Delivery',delivery_sub:'Lo envían a mi casa',
+    solo_wa:'Solo WhatsApp',solo_wa_sub:'Confirmar con el local',
+    numero_mesa:'Número de Mesa',tu_nombre:'Tu nombre',nombre_ph:'Tu nombre...',
+    hora_recogida:'¿A qué hora pasas?',direccion:'Dirección de entrega',dir_ph:'Calle, barrio, referencias...',
+    telefono:'Teléfono de contacto',costo_delivery:'Costo de delivery:',
+    resumen_pedido:'Resumen del Pedido',enviar_pedido_wa:'Enviar Pedido por WhatsApp',
+    alergenos:'Alérgenos',agregar:'Agregar',
+    disponible:'Disponible',limitado:'Stock Limitado',no_disponible:'No Disponible',
+    dias:['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+    dias_short:['dom','lun','mar','mié','jue','vie','sáb'],
+    cerrado_dia:'Cerrado'
+  },
+  en:{
+    nav_menu:'Menu',nav_about:'About',nav_reviews:'Reviews',nav_contact:'Contact',
+    qr_badge:'Digital Menu · Scan & Order',ver_menu:'View Menu',pedir_wa:'Order via WhatsApp',
+    abierto:'Open now',cerrado:'Closed now',mesa:'Table',
+    nuestro_menu_lbl:'Our Offer',nuestro_menu_h2:'Our Menu',
+    nuestro_menu_sub:'Everything made fresh to order. Tap any dish to see details.',
+    todos:'All',buscar_ph:'Search dish...',no_results:'No dishes found with that name.',
+    especiales_lbl:'Today Only',especiales_h2:"Today's Special",
+    nuestra_historia_lbl:'Our Story',deleitando:'Delighting palates',
+    resenas_lbl:'What They Say',resenas_h2:'Customer Reviews',dejar_resena:'Leave a review',
+    encontranos_lbl:'Find Us',contacto_h2:'Hours & Contact',
+    ubicacion:'Location',horario:'Opening Hours',horario_sub:'Hours may vary on holidays',
+    ver_mapa:'View on Google Maps',escribenos:'Write to us!',
+    tu_orden:'Your Order',carrito_vacio:'Your cart is empty',agrega_items:'Add dishes from the menu to start your order.',
+    nota_especial:'Special note',nota_ph:'Allergies, preferences, without...',
+    subtotal:'Subtotal',total:'Total',hacer_pedido:'Place Order',vaciar_carrito:'Clear cart',
+    como_quieres_pedir:'How do you want to order?',elige_tipo:'Choose order type',
+    en_mesa:'At Table',en_mesa_sub:'I order from my table',
+    para_llevar:'Takeout',para_llevar_sub:'I will pick it up',
+    delivery:'Delivery',delivery_sub:'Deliver to my home',
+    solo_wa:'WhatsApp Only',solo_wa_sub:'Confirm with the restaurant',
+    numero_mesa:'Table Number',tu_nombre:'Your name',nombre_ph:'Your name...',
+    hora_recogida:'What time will you pick up?',direccion:'Delivery address',dir_ph:'Street, neighborhood, references...',
+    telefono:'Phone number',costo_delivery:'Delivery fee:',
+    resumen_pedido:'Order Summary',enviar_pedido_wa:'Send Order via WhatsApp',
+    alergenos:'Allergens',agregar:'Add',
+    disponible:'Available',limitado:'Limited Stock',no_disponible:'Not Available',
+    dias:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    dias_short:['sun','mon','tue','wed','thu','fri','sat'],
+    cerrado_dia:'Closed'
+  }
+};
+const t=(k)=>i18n[lang][k]||k;
+
+// ═══════════════════════════════════════════════════════════════
+//  SHA256
+// ═══════════════════════════════════════════════════════════════
+async function sha256(msg){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LOAD DATA
+// ═══════════════════════════════════════════════════════════════
+async function loadData(){
+  try{
+    const r=await fetch('data.json?t='+Date.now());
+    appData=await r.json();
+  }catch(e){
+    appData=getDefaultData();
+    console.warn('Using default data',e);
+  }
+  initPage();
+}
+
+function getDefaultData(){
+  return{business:{name:'Mi Restaurante',tagline:'Bienvenido',heroTitle:'Bienvenido',heroSub:'',heroImg:'',logoImg:'',description:'',currency:'₡',orderMsgTable:'¡Hola! Soy de la Mesa #{{mesa}}.\n\n{{items}}\n\nTotal: {{total}}',orderMsgTakeout:'¡Hola! Pedido para llevar:\n\n{{items}}\n\nTotal: {{total}}',orderMsgDelivery:'¡Hola! Pedido a domicilio:\n\n{{items}}\n\nTotal: {{total}}\n\nDirección: {{direccion}}',showTableOrder:true,showTakeout:true,showDelivery:true,deliveryFee:2000,minOrderDelivery:0,aboutTitle:'',aboutText:'',aboutImg:'',stats:[],values:[]},contact:{whatsapp:'50600000000',waDisplay:'0000-0000',email:'',location:'Costa Rica',locationUrl:'',schedule:{mon:{open:true,from:'09:00',to:'22:00'},tue:{open:true,from:'09:00',to:'22:00'},wed:{open:true,from:'09:00',to:'22:00'},thu:{open:true,from:'09:00',to:'22:00'},fri:{open:true,from:'09:00',to:'22:00'},sat:{open:true,from:'09:00',to:'22:00'},sun:{open:false,from:'',to:''}}},categories:[{id:'general',name:'General',nameEn:'General',emoji:'🍽️',order:1}],products:[],specials:[],reviews:[]};
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT PAGE
+// ═══════════════════════════════════════════════════════════════
+function initPage(){
+  renderNav();
+  renderHero();
+  renderSpecialBar();
+  renderCategoryTabs();
+  renderProducts();
+  renderSpecialsSection();
+  renderAbout();
+  renderReviews();
+  renderContact();
+  renderSchedule();
+  checkOpenStatus();
+  handleTableParam();
+  applyLang();
+  document.getElementById('footerYear').textContent=new Date().getFullYear();
+  document.getElementById('footerName').textContent=appData.business?.name||'Restaurante';
+}
+
+function renderNav(){
+  const b=appData.business;
+  document.title=`${b.name||'Restaurante'} – Menú Digital`;
+  document.getElementById('navBrandName').innerHTML=b.name||'Restaurante';
+  if(b.logoImg){
+    const el=document.getElementById('navLogoIco');
+    el.innerHTML=`<img src="${b.logoImg}" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`;
+    el.style.background='transparent';
+  }
+}
+
+function renderHero(){
+  const b=appData.business;
+  if(b.heroImg) document.getElementById('heroBg').style.backgroundImage=`url('${b.heroImg}')`;
+  const h=document.getElementById('heroTitle');
+  h.innerHTML=b.heroTitle||`Bienvenido a <em>${b.name}</em>`;
+  document.getElementById('heroSub').textContent=b.heroSub||b.tagline||'';
+}
+
+function renderSpecialBar(){
+  const specials=(appData.specials||[]).filter(s=>s.active);
+  const bar=document.getElementById('specialBar');
+  if(!specials.length){bar.classList.remove('show');return;}
+  const s=specials[0];
+  document.getElementById('specialDish').textContent=lang==='es'?(s.dish||s.dishEn):(s.dishEn||s.dish);
+  document.getElementById('specialDesc').textContent=lang==='es'?(s.desc||s.descEn):(s.descEn||s.desc);
+  document.getElementById('specialPrice').textContent=fmtPrice(s.price);
+  document.getElementById('specialOrig').textContent=s.originalPrice?fmtPrice(s.originalPrice):'';
+  bar.classList.add('show');
+}
+
+function renderCategoryTabs(){
+  const cats=getSortedCats();
+  const tabs=document.getElementById('catTabs');
+  tabs.innerHTML=`<button class="cat-tab active" data-cat="all"><span class="tab-ico">🍽️</span><span>${t('todos')}</span></button>`;
+  cats.forEach(c=>{
+    const cnt=(appData.products||[]).filter(p=>p.cat===c.id).length;
+    if(!cnt) return;
+    const btn=document.createElement('button');
+    btn.className='cat-tab';
+    btn.dataset.cat=c.id;
+    btn.innerHTML=`<span class="tab-ico">${c.emoji}</span><span>${lang==='es'?c.name:c.nameEn||c.name}</span><span class="tab-count">${cnt}</span>`;
+    tabs.appendChild(btn);
+  });
+  tabs.querySelectorAll('.cat-tab').forEach(b=>b.addEventListener('click',()=>{
+    tabs.querySelectorAll('.cat-tab').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const q=document.getElementById('menuSearch').value;
+    filterProducts(b.dataset.cat,q);
+  }));
+}
+
+function getSortedCats(){
+  return(appData.categories||[]).slice().sort((a,b)=>(a.order||99)-(b.order||99));
+}
+
+let currentCat='all';
+function filterProducts(cat,q=''){
+  currentCat=cat||'all';
+  const query=(q||'').toLowerCase().trim();
+  const products=appData.products||[];
+  const filtered=products.filter(p=>{
+    const matchCat=currentCat==='all'||p.cat===currentCat;
+    const nm=(lang==='es'?p.name:p.nameEn||p.name)||'';
+    const dc=(lang==='es'?p.desc:p.descEn||p.desc)||'';
+    const matchQ=!query||(nm.toLowerCase().includes(query)||dc.toLowerCase().includes(query));
+    return matchCat&&matchQ;
+  });
+  renderProducts(filtered);
+}
+
+function renderProducts(filtered){
+  const container=document.getElementById('productsContainer');
+  const noRes=document.getElementById('noResults');
+  const products=filtered||appData.products||[];
+  if(!products.length){container.innerHTML='';noRes.style.display='block';return;}
+  noRes.style.display='none';
+  const cats=getSortedCats();
+  const catIds=[...new Set(products.map(p=>p.cat))];
+  const sortedCatIds=cats.filter(c=>catIds.includes(c.id)).map(c=>c.id);
+  catIds.filter(id=>!sortedCatIds.includes(id)).forEach(id=>sortedCatIds.push(id));
+  let html='';
+  if(currentCat==='all'){
+    sortedCatIds.forEach(cid=>{
+      const cat=cats.find(c=>c.id===cid)||{name:cid,nameEn:cid,emoji:'🍽️'};
+      const items=products.filter(p=>p.cat===cid);
+      if(!items.length) return;
+      html+=`<div class="cat-section">
+        <div class="cat-heading">
+          <div class="cat-heading-ico">${cat.emoji}</div>
+          <div class="cat-heading-txt"><h3>${lang==='es'?cat.name:cat.nameEn||cat.name}</h3></div>
+          <div class="cat-heading-line"></div>
+        </div>
+        <div class="products-grid">${items.map(renderCard).join('')}</div>
+      </div>`;
+    });
+  } else {
+    html=`<div class="products-grid">${products.map(renderCard).join('')}</div>`;
+  }
+  container.innerHTML=html;
+  container.querySelectorAll('.p-card').forEach(card=>{
+    card.addEventListener('click',()=>openProductModal(card.dataset.id));
+  });
+}
+
+function renderCard(p){
+  const nm=lang==='es'?p.name:p.nameEn||p.name;
+  const dc=lang==='es'?p.desc:p.descEn||p.desc;
+  const cat=(appData.categories||[]).find(c=>c.id===p.cat);
+  const catNm=cat?(lang==='es'?cat.name:cat.nameEn||cat.name):p.cat;
+  const inCart=cart.some(i=>i.id===p.id);
+  const badges=[];
+  if(p.featured) badges.push('<span class="pbadge pb-featured">★ Destacado</span>');
+  if((p.tags||[]).includes('popular')) badges.push('<span class="pbadge pb-popular">🔥 Popular</span>');
+  if((p.tags||[]).includes('new')) badges.push('<span class="pbadge pb-new">🆕 Nuevo</span>');
+  if((p.tags||[]).includes('vegan')) badges.push('<span class="pbadge pb-vegan">🌱 Vegan</span>');
+  const imgHtml=p.img?`<img src="${p.img}" alt="${nm}" loading="lazy">`:`<div class="p-emoji-ph">${p.emoji||'🍽️'}</div>`;
+  const btnCls=p.status==='available'?(inCart?'avail btn-add-in-cart':'avail'):p.status==='limited'?'limited':'off';
+  const btnTxt=p.status==='unavailable'?`🚫 ${t('no_disponible')}`:inCart?`✓ En Orden`:`+ ${t('agregar')}`;
+  return`<div class="p-card${p.featured?' featured':''}" data-id="${p.id}">
+    <div class="p-img-wrap">
+      ${imgHtml}
+      <div class="p-badge-row">${badges.join('')}${p.status==='limited'?'<span class="pbadge pb-limited">⚠️ Limitado</span>':''}</div>
+      ${p.status==='limited'?`<div class="p-status-banner limited">⚠️ ${t('limitado')}</div>`:''}
+      ${p.status==='unavailable'?`<div class="p-status-banner unavailable">🚫 ${t('no_disponible')}</div>`:''}
+    </div>
+    <div class="p-body">
+      <div class="p-cat-tag">${catNm}</div>
+      <div class="p-name">${nm}</div>
+      <div class="p-desc">${dc}</div>
+      <div class="p-foot">
+        <div><div class="p-price">${fmtPrice(p.price)}</div></div>
+        <button class="btn-add ${btnCls}" ${p.status==='unavailable'?'disabled':''}>${btnTxt}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSpecialsSection(){
+  const specials=(appData.specials||[]).filter(s=>s.active);
+  const sec=document.getElementById('especiales');
+  const cont=document.getElementById('specialsContainer');
+  if(!specials.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  cont.innerHTML=specials.map(s=>{
+    const nm=lang==='es'?(s.dish||s.dishEn):(s.dishEn||s.dish);
+    const dc=lang==='es'?(s.desc||s.descEn):(s.descEn||s.desc);
+    const saving=s.originalPrice&&s.price?Math.round((1-s.price/s.originalPrice)*100):0;
+    return`<div class="special-card">
+      <div class="sc-emoji">${s.emoji||'⭐'}</div>
+      <div class="sc-info">
+        <div class="sc-label">${lang==='es'?s.title:s.titleEn||s.title}</div>
+        <div class="sc-dish">${nm}</div>
+        <div class="sc-desc">${dc}</div>
+      </div>
+      <div class="sc-prices">
+        <div class="sc-price">${fmtPrice(s.price)}</div>
+        ${s.originalPrice?`<div class="sc-orig">${fmtPrice(s.originalPrice)}</div>`:''}
+        ${saving?`<div class="sc-save">-${saving}%</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAbout(){
+  const b=appData.business;
+  document.getElementById('aboutTitle').textContent=b.aboutTitle||'Nuestra Historia';
+  document.getElementById('aboutText').textContent=b.aboutText||'';
+  if(b.aboutImg){
+    document.getElementById('aboutImgBox').innerHTML=`<img src="${b.aboutImg}" alt="Sobre nosotros" style="width:100%;height:100%;object-fit:cover">`;
+  }
+  if(b.stats&&b.stats.length) document.getElementById('aboutStat').textContent=b.stats[0].num+' '+b.stats[0].lbl;
+  const vals=document.getElementById('aboutVals');
+  vals.innerHTML=(b.values||[]).map(v=>`<div class="val-row">
+    <div class="val-ico-box">${v.ico}</div>
+    <div class="val-tx"><strong>${v.title}</strong><p>${v.desc}</p></div>
+  </div>`).join('');
+}
+
+function renderReviews(){
+  const revs=appData.reviews||[];
+  const grid=document.getElementById('reviewsGrid');
+  if(!revs.length){grid.innerHTML='<p style="color:var(--text-s);text-align:center;padding:30px 0" data-i18n="no_reviews">Aún no hay reseñas. ¡Sé el primero!</p>';return;}
+  grid.innerHTML=revs.map(r=>`<div class="rev-card">
+    <div class="rev-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+    <p class="rev-text">"${r.text}"</p>
+    <div class="rev-foot">
+      <div>
+        <div class="rev-author">${r.name}</div>
+        ${r.date?`<div class="rev-date">${r.date}</div>`:''}
+      </div>
+      ${r.dish?`<span class="rev-dish">${r.dish}</span>`:''}
+    </div>
+  </div>`).join('');
+}
+
+function renderContact(){
+  const c=appData.contact;
+  document.getElementById('contactLocation').textContent=c.location||'—';
+  const waEl=document.getElementById('contactWa');
+  waEl.textContent=c.waDisplay||c.whatsapp||'—';
+  waEl.href=`https://wa.me/${c.whatsapp}`;
+  const emEl=document.getElementById('contactEmail');
+  emEl.textContent=c.email||'—';
+  emEl.href=c.email?`mailto:${c.email}`:'#';
+  const mapBtn=document.getElementById('btnMap');
+  if(c.locationUrl){mapBtn.href=c.locationUrl;mapBtn.style.display='inline-flex';}
+  else mapBtn.style.display='none';
+}
+
+function renderSchedule(){
+  const sch=appData.contact?.schedule||{};
+  const dayKeys=['mon','tue','wed','thu','fri','sat','sun'];
+  const dayNamesEs=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const dayNamesEn=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const now=new Date();
+  const todayJs=now.getDay(); // 0=Sun
+  const todayKey=dayKeys[todayJs===0?6:todayJs-1];
+  const cont=document.getElementById('scheduleDays');
+  cont.innerHTML=dayKeys.map((k,i)=>{
+    const d=sch[k]||{};
+    const isToday=k===todayKey;
+    const nm=lang==='es'?dayNamesEs[i]:dayNamesEn[i];
+    return`<div class="sch-day${isToday?' today':''}">
+      <span class="sch-day-name${isToday?' today-name':''}">${nm}${isToday?' •':''}</span>
+      ${d.open?`<span class="sch-day-time">${d.from} – ${d.to}</span>`:`<span class="sch-day-closed">${t('cerrado_dia')}</span>`}
+    </div>`;
+  }).join('');
+}
+
+function checkOpenStatus(){
+  const sch=appData.contact?.schedule||{};
+  const now=new Date();
+  const dayJs=now.getDay();
+  const dayKeys=['mon','tue','wed','thu','fri','sat','sun'];
+  const todayKey=dayKeys[dayJs===0?6:dayJs-1];
+  const d=sch[todayKey]||{};
+  const dot=document.getElementById('openDot');
+  const txt=document.getElementById('openText');
+  if(d.open&&d.from&&d.to){
+    const [fh,fm]=d.from.split(':').map(Number);
+    const [th,tm]=d.to.split(':').map(Number);
+    const cur=now.getHours()*60+now.getMinutes();
+    const open=fh*60+fm; const close=th*60+tm;
+    if(cur>=open&&cur<close){dot.classList.remove('closed');txt.textContent=t('abierto');}
+    else{dot.classList.add('closed');txt.textContent=t('cerrado');}
+  } else {dot.classList.add('closed');txt.textContent=t('cerrado');}
+}
+
+function handleTableParam(){
+  const pill=document.getElementById('tablePill');
+  if(tableFromUrl){
+    pill.style.display='flex';
+    document.getElementById('tablePillNum').textContent='#'+tableFromUrl;
+    document.getElementById('mesaNum').value=tableFromUrl;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PRODUCT MODAL
+// ═══════════════════════════════════════════════════════════════
+function openProductModal(id){
+  const p=(appData.products||[]).find(x=>x.id==id);
+  if(!p) return;
+  currentProduct=p; pmQty=1;
+  const nm=lang==='es'?p.name:p.nameEn||p.name;
+  const dc=lang==='es'?p.desc:p.descEn||p.desc;
+  const cat=(appData.categories||[]).find(c=>c.id===p.cat);
+  const catNm=cat?(lang==='es'?cat.name:cat.nameEn||cat.name):p.cat;
+  document.getElementById('pmCat').textContent=catNm;
+  document.getElementById('pmName').textContent=nm;
+  document.getElementById('pmDesc').textContent=dc;
+  document.getElementById('pmPrice').textContent=fmtPrice(p.price);
+  document.getElementById('pmQtyNum').textContent=1;
+  // Image
+  const imgArea=document.getElementById('pmImgArea');
+  imgArea.innerHTML=p.img?`<img src="${p.img}" alt="${nm}" class="pm-img">`:`<div class="pm-img-ph">${p.emoji||'🍽️'}</div>`;
+  // Tags
+  const tagColors={popular:'var(--terra)',featured:'var(--gold)',new:'#9C27B0',vegan:'#4CAF50',spicy:'#FF5722',light:'#03A9F4',premium:'#795548'};
+  const tagComp={popular:t('tags_popular')||'Popular',featured:t('tags_featured')||'Destacado',new:'Nuevo',vegan:'Vegano',spicy:'Picante',light:'Ligero',premium:'Premium'};
+  document.getElementById('pmTags').innerHTML=(p.tags||[]).map(tag=>`<span class="pm-tag" style="background:${tagColors[tag]||'var(--surface3)'};color:#fff">${tagComp[tag]||tag}</span>`).join('');
+  // Allergens
+  const alg=document.getElementById('pmAllergens');
+  const algList=document.getElementById('pmAllergenList');
+  if(p.allergens&&p.allergens.length){alg.style.display='block';algList.innerHTML=p.allergens.map(a=>`<span class="allergen-tag">${a}</span>`).join('');}
+  else alg.style.display='none';
+  // Add button
+  const btn=document.getElementById('pmAddBtn');
+  if(p.status==='unavailable'){btn.textContent='🚫 '+t('no_disponible');btn.disabled=true;}
+  else{btn.innerHTML=`🛒 <span>${t('agregar')}</span>`;btn.disabled=false;}
+  document.getElementById('prodModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+document.getElementById('pmClose').addEventListener('click',closeProdModal);
+document.getElementById('prodModalBg').addEventListener('click',closeProdModal);
+function closeProdModal(){document.getElementById('prodModal').classList.remove('open');document.body.style.overflow='';}
+
+document.getElementById('pmQtyMinus').addEventListener('click',()=>{if(pmQty>1){pmQty--;document.getElementById('pmQtyNum').textContent=pmQty;}});
+document.getElementById('pmQtyPlus').addEventListener('click',()=>{pmQty++;document.getElementById('pmQtyNum').textContent=pmQty;});
+document.getElementById('pmAddBtn').addEventListener('click',()=>{
+  if(!currentProduct||currentProduct.status==='unavailable') return;
+  addToCart(currentProduct,pmQty);
+  closeProdModal();
+  showToast(`✅ ${lang==='es'?currentProduct.name:currentProduct.nameEn||currentProduct.name} ${lang==='es'?'agregado':'added'}`,'ok');
+  openCart();
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  CART
+// ═══════════════════════════════════════════════════════════════
+function addToCart(p,qty=1){
+  const ex=cart.find(i=>i.id===p.id);
+  if(ex){ex.qty+=qty;}
+  else{cart.push({id:p.id,name:lang==='es'?p.name:p.nameEn||p.name,price:p.price,emoji:p.emoji||'🍽️',img:p.img||'',qty});}
+  updateCartUI();
+}
+
+function updateCartUI(){
+  const count=cart.reduce((s,i)=>s+i.qty,0);
+  const countEl=document.getElementById('cartCount');
+  countEl.textContent=count;
+  if(count>0){countEl.classList.add('show');}else{countEl.classList.remove('show');}
+  document.getElementById('cartItemsCount').textContent=count+' '+(count===1?'item':'items');
+  const empty=document.getElementById('cartEmpty');
+  const footer=document.getElementById('cartFooterSection');
+  const itemsEl=document.getElementById('cartItems');
+  if(!cart.length){
+    empty.style.display='flex';footer.style.display='none';
+    // remove item rows
+    itemsEl.querySelectorAll('.cart-item').forEach(el=>el.remove());
+    return;
+  }
+  empty.style.display='none';footer.style.display='block';
+  // render items
+  itemsEl.querySelectorAll('.cart-item').forEach(el=>el.remove());
+  cart.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='cart-item';
+    div.dataset.cid=item.id;
+    div.innerHTML=`
+      <div class="ci-img">${item.img?`<img src="${item.img}" alt="${item.name}">`:`<span>${item.emoji}</span>`}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">${fmtPrice(item.price*item.qty)}</div>
+        <div class="ci-controls">
+          <button class="qty-btn ci-minus">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn ci-plus">+</button>
+          <button class="ci-remove" title="Eliminar">✕</button>
+        </div>
+      </div>`;
+    div.querySelector('.ci-minus').addEventListener('click',()=>{
+      if(item.qty>1){item.qty--;updateCartUI();}else removeFromCart(item.id);
+    });
+    div.querySelector('.ci-plus').addEventListener('click',()=>{item.qty++;updateCartUI();});
+    div.querySelector('.ci-remove').addEventListener('click',()=>removeFromCart(item.id));
+    itemsEl.appendChild(div);
+  });
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cartSubtotal').textContent=fmtPrice(sub);
+  document.getElementById('cartTotal').textContent=fmtPrice(sub);
+  // update product cards
+  renderProducts((appData.products||[]).filter(p=>currentCat==='all'||p.cat===currentCat));
+}
+
+function removeFromCart(id){cart=cart.filter(i=>i.id!==id);updateCartUI();}
+
+function openCart(){
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.getElementById('cartOpenBtn').addEventListener('click',openCart);
+document.getElementById('cartCloseBtn').addEventListener('click',closeCart);
+document.getElementById('cartOverlay').addEventListener('click',closeCart);
+document.getElementById('btnClearCart').addEventListener('click',()=>{cart=[];updateCartUI();});
+document.getElementById('btnOrderNow').addEventListener('click',()=>{closeCart();openOrderModal();});
+
+// ═══════════════════════════════════════════════════════════════
+//  ORDER MODAL
+// ═══════════════════════════════════════════════════════════════
+function openOrderModal(){
+  if(!cart.length){showToast('⚠️ Tu carrito está vacío','err');return;}
+  selectedOrderType=tableFromUrl?'mesa':null;
+  if(tableFromUrl) document.getElementById('typeMesa').classList.add('selected');
+  // Show/hide order types based on config
+  const b=appData.business;
+  document.getElementById('typeMesa').style.display=(b.showTableOrder!==false)?'flex':'none';
+  document.getElementById('typeTakeout').style.display=(b.showTakeout!==false)?'flex':'none';
+  document.getElementById('typeDelivery').style.display=(b.showDelivery!==false)?'flex':'none';
+  const df=b.deliveryFee||0;
+  document.getElementById('deliveryFeeDisplay').textContent=fmtPrice(df);
+  renderOrderSummary();
+  document.getElementById('orderModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(tableFromUrl) selectOrderType('mesa');
+}
+function closeOrderModal(){document.getElementById('orderModal').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('orderModalClose').addEventListener('click',closeOrderModal);
+document.getElementById('orderModalBg').addEventListener('click',closeOrderModal);
+
+document.querySelectorAll('.order-type-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>selectOrderType(btn.dataset.type));
+});
+
+function selectOrderType(type){
+  selectedOrderType=type;
+  document.querySelectorAll('.order-type-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`[data-type="${type}"]`)?.classList.add('selected');
+  document.querySelectorAll('.type-fields').forEach(f=>f.classList.remove('show'));
+  if(type==='mesa') document.getElementById('fieldsMesa').classList.add('show');
+  else if(type==='takeout') document.getElementById('fieldsTakeout').classList.add('show');
+  else if(type==='delivery') document.getElementById('fieldsDelivery').classList.add('show');
+}
+
+function renderOrderSummary(){
+  const items=document.getElementById('omSummaryItems');
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  items.innerHTML=cart.map(i=>`<div class="om-summary-item"><span>${i.name} x${i.qty}</span><span>${fmtPrice(i.price*i.qty)}</span></div>`).join('');
+  items.innerHTML+=`<div class="om-summary-item"><span>${t('total')}</span><span>${fmtPrice(sub)}</span></div>`;
+}
+
+document.getElementById('btnSendWa').addEventListener('click',sendWhatsAppOrder);
+
+function sendWhatsAppOrder(){
+  if(!selectedOrderType){showToast('⚠️ Elige el tipo de pedido','err');return;}
+  const b=appData.business;
+  const c=appData.contact;
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const delivery=(selectedOrderType==='delivery'?b.deliveryFee||0:0);
+  const total=sub+delivery;
+  const itemsStr=cart.map(i=>`• ${i.name} x${i.qty} – ${fmtPrice(i.price*i.qty)}`).join('\n');
+  const note=document.getElementById('cartNote').value;
+  const noteStr=note?`\n\n📝 *Nota:* ${note}`:'';
+  let msg='';
+  if(selectedOrderType==='mesa'){
+    const mesa=document.getElementById('mesaNum').value||'?';
+    const nombre=document.getElementById('mesaNombre').value;
+    msg=(b.orderMsgTable||'¡Hola! Mesa #{{mesa}}:\n{{items}}\nTotal: {{total}}')
+      .replace('{{mesa}}',mesa)
+      .replace('{{items}}',itemsStr)
+      .replace('{{total}}',fmtPrice(total))
+      +(nombre?`\n👤 *Nombre:* ${nombre}`:'')
+      +noteStr;
+  } else if(selectedOrderType==='takeout'){
+    const nombre=document.getElementById('takeoutNombre').value;
+    const hora=document.getElementById('takeoutHora').value;
+    msg=(b.orderMsgTakeout||'¡Hola! Para llevar:\n{{items}}\nTotal: {{total}}')
+      .replace('{{items}}',itemsStr)
+      .replace('{{total}}',fmtPrice(total))
+      +(nombre?`\n👤 *Nombre:* ${nombre}`:'')
+      +(hora?`\n🕐 *Hora de recogida:* ${hora}`:'')
+      +noteStr;
+  } else if(selectedOrderType==='delivery'){
+    const nombre=document.getElementById('delivNombre').value;
+    const dir=document.getElementById('delivDir').value||'(sin dirección)';
+    const tel=document.getElementById('delivTel').value;
+    msg=(b.orderMsgDelivery||'¡Hola! Delivery:\n{{items}}\nTotal: {{total}}\nDirección: {{direccion}}')
+      .replace('{{items}}',itemsStr)
+      .replace('{{total}}',fmtPrice(total))
+      .replace('{{direccion}}',dir)
+      +(nombre?`\n👤 *Nombre:* ${nombre}`:'')
+      +(tel?`\n📱 *Tel:* ${tel}`:'')
+      +(delivery?`\n🛵 *Delivery:* ${fmtPrice(delivery)}`:'')
+      +noteStr;
+  } else {
+    // wa_simple
+    msg=`¡Hola! Quisiera hacer un pedido:\n\n${itemsStr}\n\n*Total: ${fmtPrice(total)}*${noteStr}`;
+  }
+  const waNum=c.whatsapp||'50600000000';
+  const url=`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+  closeOrderModal();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  WA FLOAT
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('waFloatBtn').addEventListener('click',()=>{
+  const wa=appData.contact?.whatsapp||'50600000000';
+  window.open(`https://wa.me/${wa}`,'_blank');
+});
+document.getElementById('heroWaBtn').addEventListener('click',()=>{
+  if(cart.length) openOrderModal();
+  else{const wa=appData.contact?.whatsapp||'50600000000';window.open(`https://wa.me/${wa}`,'_blank');}
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('menuSearch').addEventListener('input',e=>{
+  filterProducts(currentCat,e.target.value);
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  NAV SCROLL & HAMBURGER
+// ═══════════════════════════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>10);
+});
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+document.querySelectorAll('.mobile-menu a,.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  LANGUAGE
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btnEs').addEventListener('click',()=>setLang('es'));
+document.getElementById('btnEn').addEventListener('click',()=>setLang('en'));
+function setLang(l){
+  lang=l;
+  document.getElementById('btnEs').classList.toggle('active',l==='es');
+  document.getElementById('btnEn').classList.toggle('active',l==='en');
+  applyLang();
+  initPage();
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.dataset.i18n;
+    if(i18n[lang][k]) el.textContent=i18n[lang][k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const k=el.dataset.i18nPh;
+    if(i18n[lang][k]) el.placeholder=i18n[lang][k];
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ADMIN PANEL – ACCESS
+// ═══════════════════════════════════════════════════════════════
+const DEFAULT_PWD_HASH='8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+document.getElementById('navBrand').addEventListener('click',async()=>{
+  if(adminUnlocked) return;
+  adminLogoClicks++;
+  if(adminLogoClicks>=5){
+    adminLogoClicks=0;
+    const pwd=prompt('🔐 Contraseña del Panel:');
+    if(!pwd) return;
+    const h=await sha256(pwd);
+    const stored=localStorage.getItem(ADMIN_HASH_KEY)||DEFAULT_PWD_HASH;
+    if(h===stored){adminUnlocked=true;openAdmin();}
+    else{showToast('❌ Contraseña incorrecta','err');}
+  }
+});
+
+function openAdmin(){
+  document.getElementById('adminPanel').style.display='block';
+  document.body.style.overflow='hidden';
+  loadAdminForms();
+}
+document.getElementById('closeAdminBtn').addEventListener('click',()=>{
+  document.getElementById('adminPanel').style.display='none';
+  document.body.style.overflow='';
+  adminUnlocked=false;
+});
+
+// Admin tabs
+document.querySelectorAll('.admin-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.admin-pane').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.pane).classList.add('active');
+    if(t.dataset.pane==='panePublicar') document.getElementById('previewJson').textContent=JSON.stringify(appData,null,2);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  ADMIN – LOAD FORMS
+// ═══════════════════════════════════════════════════════════════
+function loadAdminForms(){
+  loadGhConfig();
+  loadNegocioForm();
+  loadMenuList();
+  loadCatsList();
+  loadSpecialForm();
+  loadContactForm();
+}
+
+// GH Config
+function loadGhConfig(){
+  const cfg=JSON.parse(localStorage.getItem(GH_CONFIG_KEY)||'{}');
+  document.getElementById('cfgToken').value=cfg.token||'';
+  document.getElementById('cfgUser').value=cfg.user||'';
+  document.getElementById('cfgRepo').value=cfg.repo||'';
+  document.getElementById('cfgBranch').value=cfg.branch||'main';
+}
+document.getElementById('btnSaveConfig').addEventListener('click',()=>{
+  const cfg={token:document.getElementById('cfgToken').value,user:document.getElementById('cfgUser').value,repo:document.getElementById('cfgRepo').value,branch:document.getElementById('cfgBranch').value||'main'};
+  localStorage.setItem(GH_CONFIG_KEY,JSON.stringify(cfg));
+  showToast('✅ Configuración guardada','ok');
+});
+document.getElementById('btnChangePwd').addEventListener('click',async()=>{
+  const p1=document.getElementById('newPwd').value;
+  const p2=document.getElementById('newPwd2').value;
+  if(!p1){showToast('⚠️ Ingresa una contraseña','err');return;}
+  if(p1!==p2){showToast('⚠️ Las contraseñas no coinciden','err');return;}
+  const h=await sha256(p1);
+  localStorage.setItem(ADMIN_HASH_KEY,h);
+  document.getElementById('newPwd').value='';document.getElementById('newPwd2').value='';
+  showToast('✅ Contraseña cambiada','ok');
+});
+
+// Negocio
+function loadNegocioForm(){
+  const b=appData.business||{};
+  document.getElementById('bName').value=b.name||'';
+  document.getElementById('bTagline').value=b.tagline||'';
+  document.getElementById('bHeroTitle').value=b.heroTitle||'';
+  document.getElementById('bHeroSub').value=b.heroSub||'';
+  document.getElementById('bHeroImg').value=b.heroImg||'';
+  document.getElementById('bLogoImg').value=b.logoImg||'';
+  document.getElementById('bAboutText').value=b.aboutText||'';
+  document.getElementById('bAboutImg').value=b.aboutImg||'';
+  document.getElementById('bCurrency').value=b.currency||'₡';
+  document.getElementById('bShowTable').checked=b.showTableOrder!==false;
+  document.getElementById('bShowTakeout').checked=b.showTakeout!==false;
+  document.getElementById('bShowDelivery').checked=b.showDelivery!==false;
+  // Stats
+  const statsEd=document.getElementById('statsEditor');
+  statsEd.innerHTML=(b.stats||[{num:'',lbl:''},{num:'',lbl:''},{num:'',lbl:''}]).map((s,i)=>`
+    <div class="admin-grid-2" style="margin-bottom:10px">
+      <div class="form-row"><label>Stat ${i+1} – Número</label><input type="text" class="stat-num" data-i="${i}" value="${s.num}"></div>
+      <div class="form-row"><label>Stat ${i+1} – Etiqueta</label><input type="text" class="stat-lbl" data-i="${i}" value="${s.lbl}"></div>
+    </div>`).join('');
+}
+document.getElementById('btnSaveNegocio').addEventListener('click',()=>{
+  if(!appData.business) appData.business={};
+  appData.business.name=document.getElementById('bName').value;
+  appData.business.tagline=document.getElementById('bTagline').value;
+  appData.business.heroTitle=document.getElementById('bHeroTitle').value;
+  appData.business.heroSub=document.getElementById('bHeroSub').value;
+  appData.business.heroImg=document.getElementById('bHeroImg').value;
+  appData.business.logoImg=document.getElementById('bLogoImg').value;
+  appData.business.aboutText=document.getElementById('bAboutText').value;
+  appData.business.aboutImg=document.getElementById('bAboutImg').value;
+  appData.business.currency=document.getElementById('bCurrency').value||'₡';
+  appData.business.showTableOrder=document.getElementById('bShowTable').checked;
+  appData.business.showTakeout=document.getElementById('bShowTakeout').checked;
+  appData.business.showDelivery=document.getElementById('bShowDelivery').checked;
+  showToast('✅ Negocio actualizado','ok');initPage();
+});
+document.getElementById('btnSaveStats').addEventListener('click',()=>{
+  const nums=[...document.querySelectorAll('.stat-num')].map(i=>i.value);
+  const lbls=[...document.querySelectorAll('.stat-lbl')].map(i=>i.value);
+  appData.business.stats=nums.map((n,i)=>({num:n,lbl:lbls[i]})).filter(s=>s.num);
+  showToast('✅ Stats actualizadas','ok');initPage();
+});
+
+// ── MENU ITEMS ──
+function populateCatSelect(selEl){
+  const cats=getSortedCats();
+  selEl.innerHTML=cats.map(c=>`<option value="${c.id}">${c.emoji} ${c.name}</option>`).join('');
+}
+
+function loadMenuList(){
+  const list=document.getElementById('adminItemsList');
+  const items=appData.products||[];
+  if(!items.length){list.innerHTML='<p style="color:var(--text-s);padding:16px">No hay platillos aún.</p>';return;}
+  list.innerHTML=items.map(p=>`
+    <div class="admin-item-row">
+      <div class="ai-img">${p.img?`<img src="${p.img}" alt="${p.name}">`:`<span>${p.emoji||'🍽️'}</span>`}</div>
+      <div class="ai-info">
+        <div class="ai-name">${p.name}</div>
+        <div class="ai-meta">${p.cat} · ${fmtPrice(p.price)}</div>
+      </div>
+      <div class="ai-status-dot ${p.status==='available'?'sd-available':p.status==='limited'?'sd-limited':'sd-unavailable'}" title="${p.status}"></div>
+      <div class="ai-actions">
+        <button class="btn-edit-sm" data-id="${p.id}" title="Editar">✏️</button>
+        <button class="btn-del-sm" data-id="${p.id}" title="Eliminar">🗑️</button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.btn-edit-sm').forEach(b=>b.addEventListener('click',()=>editItem(b.dataset.id)));
+  list.querySelectorAll('.btn-del-sm').forEach(b=>b.addEventListener('click',()=>deleteItem(b.dataset.id)));
+}
+
+document.getElementById('btnNewItem').addEventListener('click',()=>{
+  document.getElementById('editItemId').value='';
+  document.getElementById('itemFormTitle').textContent='➕ Nuevo Platillo';
+  document.getElementById('eiName').value='';
+  document.getElementById('eiNameEn').value='';
+  document.getElementById('eiDesc').value='';
+  document.getElementById('eiDescEn').value='';
+  document.getElementById('eiPrice').value='';
+  document.getElementById('eiImg').value='';
+  document.getElementById('eiEmoji').value='';
+  document.getElementById('eiStatus').value='available';
+  document.getElementById('eiFeatured').checked=false;
+  document.querySelectorAll('#tagsEditor .badge-toggle,.#allergensEditor .badge-toggle').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#tagsEditor .badge-toggle').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#allergensEditor .badge-toggle').forEach(b=>b.classList.remove('active'));
+  populateCatSelect(document.getElementById('eiCat'));
+  document.getElementById('itemEditForm').classList.add('show');
+  document.getElementById('itemEditForm').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('btnCancelItem').addEventListener('click',()=>{document.getElementById('itemEditForm').classList.remove('show');});
+
+document.querySelectorAll('#tagsEditor .badge-toggle').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('active')));
+document.querySelectorAll('#allergensEditor .badge-toggle').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('active')));
+
+function editItem(id){
+  const p=(appData.products||[]).find(x=>x.id==id);
+  if(!p) return;
+  populateCatSelect(document.getElementById('eiCat'));
+  document.getElementById('editItemId').value=p.id;
+  document.getElementById('itemFormTitle').textContent='✏️ Editar Platillo';
+  document.getElementById('eiName').value=p.name||'';
+  document.getElementById('eiNameEn').value=p.nameEn||'';
+  document.getElementById('eiDesc').value=p.desc||'';
+  document.getElementById('eiDescEn').value=p.descEn||'';
+  document.getElementById('eiPrice').value=p.price||'';
+  document.getElementById('eiImg').value=p.img||'';
+  document.getElementById('eiEmoji').value=p.emoji||'';
+  document.getElementById('eiStatus').value=p.status||'available';
+  document.getElementById('eiFeatured').checked=!!p.featured;
+  document.getElementById('eiCat').value=p.cat||'';
+  document.querySelectorAll('#tagsEditor .badge-toggle').forEach(b=>{b.classList.toggle('active',(p.tags||[]).includes(b.dataset.tag));});
+  document.querySelectorAll('#allergensEditor .badge-toggle').forEach(b=>{b.classList.toggle('active',(p.allergens||[]).includes(b.dataset.allg));});
+  document.getElementById('itemEditForm').classList.add('show');
+  document.getElementById('itemEditForm').scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('btnSaveItem').addEventListener('click',()=>{
+  const id=document.getElementById('editItemId').value;
+  const tags=[...document.querySelectorAll('#tagsEditor .badge-toggle.active')].map(b=>b.dataset.tag);
+  const allergens=[...document.querySelectorAll('#allergensEditor .badge-toggle.active')].map(b=>b.dataset.allg);
+  const item={
+    id:id?Number(id):Date.now(),
+    name:document.getElementById('eiName').value,
+    nameEn:document.getElementById('eiNameEn').value,
+    cat:document.getElementById('eiCat').value,
+    desc:document.getElementById('eiDesc').value,
+    descEn:document.getElementById('eiDescEn').value,
+    price:Number(document.getElementById('eiPrice').value)||0,
+    emoji:document.getElementById('eiEmoji').value||'🍽️',
+    img:document.getElementById('eiImg').value,
+    status:document.getElementById('eiStatus').value,
+    featured:document.getElementById('eiFeatured').checked,
+    tags,allergens
+  };
+  if(!item.name){showToast('⚠️ El nombre es obligatorio','err');return;}
+  if(!appData.products) appData.products=[];
+  if(id){const idx=appData.products.findIndex(x=>x.id==id);if(idx>=0) appData.products[idx]=item;else appData.products.push(item);}
+  else appData.products.push(item);
+  document.getElementById('itemEditForm').classList.remove('show');
+  loadMenuList();renderCategoryTabs();renderProducts();
+  showToast('✅ Platillo guardado','ok');
+});
+
+function deleteItem(id){
+  if(!confirm('¿Eliminar este platillo?')) return;
+  appData.products=(appData.products||[]).filter(x=>x.id!=id);
+  loadMenuList();renderCategoryTabs();renderProducts();
+  showToast('🗑️ Platillo eliminado','ok');
+}
+
+// ── CATEGORIES ──
+function loadCatsList(){
+  const list=document.getElementById('adminCatsList');
+  const cats=getSortedCats();
+  list.innerHTML=cats.map(c=>`
+    <div class="admin-item-row">
+      <div class="ai-emoji">${c.emoji}</div>
+      <div class="ai-info"><div class="ai-name">${c.name} / ${c.nameEn||c.name}</div><div class="ai-meta">ID: ${c.id} · Orden: ${c.order}</div></div>
+      <div class="ai-actions">
+        <button class="btn-edit-sm" data-cid="${c.id}" title="Editar">✏️</button>
+        <button class="btn-del-sm" data-cid="${c.id}" title="Eliminar">🗑️</button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.btn-edit-sm').forEach(b=>b.addEventListener('click',()=>editCat(b.dataset.cid)));
+  list.querySelectorAll('.btn-del-sm').forEach(b=>b.addEventListener('click',()=>deleteCat(b.dataset.cid)));
+}
+
+function editCat(id){
+  const c=(appData.categories||[]).find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('editCatId').value=c.id;
+  document.getElementById('catFormTitle').textContent='✏️ Editar Categoría';
+  document.getElementById('catName').value=c.name;
+  document.getElementById('catNameEn').value=c.nameEn||'';
+  document.getElementById('catEmoji').value=c.emoji;
+  document.getElementById('catOrder').value=c.order||1;
+}
+
+document.getElementById('btnSaveCat').addEventListener('click',()=>{
+  const id=document.getElementById('editCatId').value;
+  const nm=document.getElementById('catName').value.trim();
+  if(!nm){showToast('⚠️ El nombre es obligatorio','err');return;}
+  const slugId=id||nm.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const cat={id:slugId,name:nm,nameEn:document.getElementById('catNameEn').value,emoji:document.getElementById('catEmoji').value||'🍽️',order:Number(document.getElementById('catOrder').value)||99};
+  if(!appData.categories) appData.categories=[];
+  if(id){const idx=appData.categories.findIndex(x=>x.id===id);if(idx>=0) appData.categories[idx]=cat;else appData.categories.push(cat);}
+  else appData.categories.push(cat);
+  document.getElementById('editCatId').value='';document.getElementById('catFormTitle').textContent='➕ Nueva Categoría';
+  document.getElementById('catName').value='';document.getElementById('catNameEn').value='';document.getElementById('catEmoji').value='';document.getElementById('catOrder').value='';
+  loadCatsList();renderCategoryTabs();
+  showToast('✅ Categoría guardada','ok');
+});
+document.getElementById('btnCancelCat').addEventListener('click',()=>{
+  document.getElementById('editCatId').value='';document.getElementById('catFormTitle').textContent='➕ Nueva Categoría';
+  ['catName','catNameEn','catEmoji','catOrder'].forEach(id=>document.getElementById(id).value='');
+});
+function deleteCat(id){
+  if(!confirm('¿Eliminar esta categoría?')) return;
+  appData.categories=(appData.categories||[]).filter(c=>c.id!==id);
+  loadCatsList();renderCategoryTabs();
+  showToast('🗑️ Categoría eliminada','ok');
+}
+
+// ── SPECIALS ──
+function loadSpecialForm(){
+  const s=(appData.specials||[])[0]||{};
+  document.getElementById('specId').value=s.id||'';
+  document.getElementById('specTitle').value=s.title||'Especial del Día';
+  document.getElementById('specTitleEn').value=s.titleEn||'Daily Special';
+  document.getElementById('specDish').value=s.dish||'';
+  document.getElementById('specDishEn').value=s.dishEn||'';
+  document.getElementById('specDesc').value=s.desc||'';
+  document.getElementById('specDescEn').value=s.descEn||'';
+  document.getElementById('specPrice').value=s.price||'';
+  document.getElementById('specOrigPrice').value=s.originalPrice||'';
+  document.getElementById('specEmoji').value=s.emoji||'⭐';
+  document.getElementById('specActive').checked=!!s.active;
+}
+document.getElementById('btnSaveSpec').addEventListener('click',()=>{
+  const s={id:document.getElementById('specId').value||Date.now(),title:document.getElementById('specTitle').value,titleEn:document.getElementById('specTitleEn').value,dish:document.getElementById('specDish').value,dishEn:document.getElementById('specDishEn').value,desc:document.getElementById('specDesc').value,descEn:document.getElementById('specDescEn').value,price:Number(document.getElementById('specPrice').value)||0,originalPrice:Number(document.getElementById('specOrigPrice').value)||0,emoji:document.getElementById('specEmoji').value||'⭐',active:document.getElementById('specActive').checked};
+  appData.specials=[s];
+  renderSpecialBar();renderSpecialsSection();
+  showToast('✅ Especial guardado','ok');
+});
+
+// ── CONTACT FORM ──
+function loadContactForm(){
+  const c=appData.contact||{};
+  document.getElementById('cWa').value=c.whatsapp||'';
+  document.getElementById('cWaDisplay').value=c.waDisplay||'';
+  document.getElementById('cEmail').value=c.email||'';
+  document.getElementById('cLocation').value=c.location||'';
+  document.getElementById('cMapUrl').value=c.locationUrl||'';
+  // Schedule editor
+  const sch=c.schedule||{};
+  const dayKeys=['mon','tue','wed','thu','fri','sat','sun'];
+  const dayNames=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  document.getElementById('scheduleEditor').innerHTML=dayKeys.map((k,i)=>{
+    const d=sch[k]||{open:false,from:'',to:''};
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:6px;min-width:120px;font-size:.84rem;cursor:pointer"><input type="checkbox" class="sch-open" data-day="${k}" ${d.open?'checked':''}> ${dayNames[i]}</label>
+      <input type="time" class="sch-from" data-day="${k}" value="${d.from||''}" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--cream);font-size:.82rem;width:100px">
+      <span style="color:var(--text-s);font-size:.8rem">a</span>
+      <input type="time" class="sch-to" data-day="${k}" value="${d.to||''}" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--cream);font-size:.82rem;width:100px">
+    </div>`;
+  }).join('');
+}
+document.getElementById('btnSaveContact').addEventListener('click',()=>{
+  if(!appData.contact) appData.contact={};
+  appData.contact.whatsapp=document.getElementById('cWa').value;
+  appData.contact.waDisplay=document.getElementById('cWaDisplay').value;
+  appData.contact.email=document.getElementById('cEmail').value;
+  appData.contact.location=document.getElementById('cLocation').value;
+  appData.contact.locationUrl=document.getElementById('cMapUrl').value;
+  renderContact();showToast('✅ Contacto guardado','ok');
+});
+document.getElementById('btnSaveSchedule').addEventListener('click',()=>{
+  const dayKeys=['mon','tue','wed','thu','fri','sat','sun'];
+  const sch={};
+  dayKeys.forEach(k=>{
+    const open=document.querySelector(`.sch-open[data-day="${k}"]`)?.checked||false;
+    const from=document.querySelector(`.sch-from[data-day="${k}"]`)?.value||'';
+    const to=document.querySelector(`.sch-to[data-day="${k}"]`)?.value||'';
+    sch[k]={open,from,to};
+  });
+  appData.contact.schedule=sch;
+  renderSchedule();checkOpenStatus();showToast('✅ Horario guardado','ok');
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  GITHUB PUBLISH
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btnGhPush').addEventListener('click',publishToGitHub);
+async function publishToGitHub(){
+  const cfg=JSON.parse(localStorage.getItem(GH_CONFIG_KEY)||'{}');
+  const {token,user,repo,branch}=cfg;
+  if(!token||!user||!repo){showPushStatus('error','❌ Configura el Token, Usuario y Repositorio primero.');return;}
+  const btn=document.getElementById('btnGhPush');
+  btn.disabled=true;
+  showPushStatus('loading','⏳ Publicando en GitHub...');
+  try{
+    const filePath='data.json';
+    const apiUrl=`https://api.github.com/repos/${user}/${repo}/contents/${filePath}`;
+    const headers={'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+    let sha='';
+    try{const r=await fetch(apiUrl,{headers});if(r.ok){const d=await r.json();sha=d.sha;}}catch(_){}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(appData,null,2))));
+    const body={message:`🍽️ Update menu data – ${new Date().toLocaleString('es-CR')}`,content,branch:branch||'main'};
+    if(sha) body.sha=sha;
+    const res=await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});
+    if(res.ok){showPushStatus('ok','✅ ¡Publicado! Los cambios se verán en vivo en 30-60 segundos.');}
+    else{const err=await res.json();showPushStatus('error','❌ Error: '+(err.message||res.status));}
+  }catch(e){showPushStatus('error','❌ Error de red: '+e.message);}
+  finally{btn.disabled=false;}
+}
+function showPushStatus(type,msg){
+  const el=document.getElementById('pushStatus');
+  el.className='push-status '+(type==='ok'?'ok':type==='loading'?'loading':'err');
+  el.textContent=msg;el.style.display='block';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function fmtPrice(n){
+  if(!n&&n!==0) return '—';
+  const curr=appData.business?.currency||'₡';
+  return`${curr}${Number(n).toLocaleString('es-CR')}`;
+}
+
+function showToast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className=`toast ${type} show`;
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  START
+// ═══════════════════════════════════════════════════════════════
+loadData();
+</script>
+</body>
+</html>

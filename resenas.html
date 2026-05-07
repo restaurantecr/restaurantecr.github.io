@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dejar Reseña – La Mesa CR</title>
+<meta name="description" content="Comparte tu experiencia en La Mesa CR. Tu opinión es muy importante para nosotros.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0B07;--bg2:#1A1209;--surface:#1F1610;--surface2:#2A1E12;
+  --gold:#E8A020;--terra:#C15C3A;--terra-l:#D97250;
+  --cream:#FDF6ED;--text-m:rgba(253,246,237,.72);--text-s:rgba(253,246,237,.45);
+  --border:rgba(232,160,32,.15);--border2:rgba(232,160,32,.3);
+  --green:#25D366;--r:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 16px;-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:22px;max-width:520px;width:100%;padding:36px 32px;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:fadeUp .4s ease}
+@media(max-width:480px){.card{padding:28px 20px}}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-s);font-size:.82rem;margin-bottom:24px;text-decoration:none;transition:color .2s}
+.back-link:hover{color:var(--gold)}
+.card-ico{font-size:42px;margin-bottom:12px;display:block}
+h1{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--cream);margin-bottom:6px}
+.sub{font-size:.88rem;color:var(--text-m);line-height:1.65;margin-bottom:28px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-s);margin-bottom:7px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:.9rem;color:var(--cream);font-family:inherit;outline:none;transition:border-color .25s}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--text-s)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--border2)}
+.form-group select option{background:#1A1209}
+.stars-wrap{display:flex;gap:6px;flex-direction:row-reverse;justify-content:flex-end}
+.stars-wrap input{display:none}
+.stars-wrap label{font-size:2rem;cursor:pointer;color:var(--text-s);transition:color .15s}
+.stars-wrap input:checked~label,.stars-wrap label:hover,.stars-wrap label:hover~label{color:var(--gold)}
+.btn-sub{width:100%;padding:14px;border-radius:50px;background:linear-gradient(90deg,var(--terra),var(--terra-l));border:none;color:#fff;font-weight:800;font-size:.95rem;font-family:inherit;cursor:pointer;transition:all .25s;margin-top:6px;box-shadow:0 6px 20px rgba(193,92,58,.35)}
+.btn-sub:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(193,92,58,.5)}
+.btn-sub:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.success-box{display:none;text-align:center;padding:20px 0}
+.success-box .s-ico{font-size:54px;margin-bottom:12px}
+.success-box h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--gold);margin-bottom:8px}
+.success-box p{font-size:.88rem;color:var(--text-m);line-height:1.65}
+.btn-home{display:inline-flex;align-items:center;gap:7px;margin-top:20px;background:var(--gold);color:#0F0B07;padding:12px 26px;border-radius:50px;font-weight:800;font-size:.88rem;text-decoration:none;transition:all .25s}
+.btn-home:hover{transform:translateY(-2px)}
+.required-note{font-size:.74rem;color:var(--text-s);margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="card">
+  <a class="back-link" href="index.html">← Volver al menú</a>
+  <div id="formSection">
+    <span class="card-ico">⭐</span>
+    <h1>Cuéntanos tu experiencia</h1>
+    <p class="sub">Tu opinión nos ayuda a mejorar y a que más personas conozcan La Mesa CR. ¡Gracias por tomarte el tiempo!</p>
+    <p class="required-note">* Campos obligatorios</p>
+    <form id="resenaForm">
+      <!-- Hidden Formspree fields -->
+      <input type="hidden" name="_subject" value="Nueva Reseña – La Mesa CR">
+      <input type="text" name="_gotcha" style="display:none">
+
+      <div class="form-group">
+        <label>Tu Nombre *</label>
+        <input type="text" name="name" placeholder="Ej: María Fernanda" required maxlength="80">
+      </div>
+      <div class="form-group">
+        <label>Calificación *</label>
+        <div class="stars-wrap">
+          <input type="radio" id="s5" name="rating" value="5" required><label for="s5">★</label>
+          <input type="radio" id="s4" name="rating" value="4"><label for="s4">★</label>
+          <input type="radio" id="s3" name="rating" value="3"><label for="s3">★</label>
+          <input type="radio" id="s2" name="rating" value="2"><label for="s2">★</label>
+          <input type="radio" id="s1" name="rating" value="1"><label for="s1">★</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>¿Qué plato pediste?</label>
+        <input type="text" name="dish" placeholder="Ej: Olla de Carne, Ceviche..." maxlength="100">
+      </div>
+      <div class="form-group">
+        <label>Tu Reseña *</label>
+        <textarea name="text" rows="5" placeholder="Comparte tu experiencia: el sabor, el servicio, el ambiente..." required maxlength="600"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Fecha (opcional)</label>
+        <input type="text" name="date" placeholder="Ej: Mayo 2025" maxlength="30">
+      </div>
+      <button class="btn-sub" type="submit" id="submitBtn">Enviar Reseña ✨</button>
+    </form>
+  </div>
+  <div class="success-box" id="successBox">
+    <div class="s-ico">🎉</div>
+    <h2>¡Gracias por tu reseña!</h2>
+    <p>Tu opinión es muy valiosa para nosotros. La publicaremos pronto en nuestra página. ¡Esperamos verte de nuevo!</p>
+    <a href="index.html" class="btn-home">🍽️ Volver al Menú</a>
+  </div>
+</div>
+
+<script>
+// Load formspree endpoint from data.json
+async function loadEndpoint(){
+  try{
+    const r=await fetch('data.json?t='+Date.now());
+    const d=await r.json();
+    return d.formspreeResenas;
+  }catch(e){return null;}
+}
+
+document.getElementById('resenaForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Enviando...';
+  const endpoint=await loadEndpoint();
+  if(!endpoint){
+    alert('Error: No se pudo cargar la configuración. Intenta de nuevo.');
+    btn.disabled=false;btn.textContent='Enviar Reseña ✨';return;
+  }
+  try{
+    const formData=new FormData(this);
+    const res=await fetch(`https://formspree.io/f/${endpoint}`,{method:'POST',body:formData,headers:{Accept:'application/json'}});
+    if(res.ok){
+      document.getElementById('formSection').style.display='none';
+      document.getElementById('successBox').style.display='block';
+    } else {
+      btn.disabled=false;btn.textContent='Enviar Reseña ✨';
+      alert('Hubo un error al enviar. Por favor intenta de nuevo.');
+    }
+  }catch(err){
+    btn.disabled=false;btn.textContent='Enviar Reseña ✨';
+    alert('Error de conexión. Por favor intenta de nuevo.');
+  }
+});
+</script>
+</body>
+</html>
